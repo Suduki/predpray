@@ -6,7 +6,7 @@ public class Fox extends Animal {
 	private int hunger;
 	
 	
-	private int hungerConsumedWhenMating = 20;
+	private int hungerConsumedWhenMating = 10;
 	private int hungerAtBirth = 40;
 	private int starvationLimitForDeath = 100;
 	
@@ -16,6 +16,7 @@ public class Fox extends Animal {
 		super(map, positionX, positionY);
 		this.setColor(new float[] {1,0,0});
 		this.hunger = hungerAtBirth;
+		this.fertilityAge = 20D;
 	}
 	
 	public Fox(Fox mother, Fox father) {
@@ -49,14 +50,14 @@ public class Fox extends Animal {
 		}
 	}
 	
-	@Override
-	public <T extends Animal> void mateWith(T mother) {
-//		if (hunger < starvationLimitForDeath * dontMateDueToHunger.intValue()) {
-			super.mateWith(mother);
-			this.hunger = this.hunger + hungerConsumedWhenMating;
-			((Fox) mother).setHunger(((Fox) mother).getHunger() + ((Fox) mother).hungerConsumedWhenMating);
-//		}
-	}
+//	@Override
+//	public <T extends Animal> void mateWith(T mother) {
+////		if (hunger < starvationLimitForDeath * dontMateDueToHunger.intValue()) {
+//			super.mateWith(mother);
+//			this.hunger = this.hunger + hungerConsumedWhenMating;
+//			((Fox) mother).setHunger(((Fox) mother).getHunger() + ((Fox) mother).hungerConsumedWhenMating);
+////		}
+//	}
 	
 	
 	private void setHunger(int hunger) {

@@ -45,7 +45,6 @@ public abstract class Animal {
 		this.age = new Integer(0);
 		this.sinceLastBaby = new Integer(0);
 		this.fertility = new Double(1);
-		this.fertilityAge = new Double(10.5);
 	}
 	
 	public boolean moveOneStepInCompletelyRandomDirection() {

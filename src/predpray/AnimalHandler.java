@@ -5,7 +5,7 @@ import java.util.Random;
 
 
 public class AnimalHandler {
-	public final static int TOTAL_NUMBER_OF_ALLOWED_ANIMALS = 3000;
+	public final static int TOTAL_NUMBER_OF_ALLOWED_ANIMALS = 1000;
 	private static int totalNumberOfLivingAnimals = 0;
 	private static int totalNumberOfLivingRabbits = 0;
 	private static int totalNumberOfLivingFoxes = 0;

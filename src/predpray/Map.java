@@ -8,6 +8,7 @@ public class Map {
 	public static final int numberOfNodesX = 30; //TODO öka storlek, kolla svart ruta.
 	public static final int numberOfNodesY = 30;
 	private Node[][] mapElements;
+	// TODO implementera maxantal på en ruta
 	
 	public Map() {
 		mapElements = new Node[numberOfNodesX][numberOfNodesY];

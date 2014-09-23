@@ -24,7 +24,7 @@ public class Main {
 		
 		map = new Map();
 		displayHelper = new DisplayHelper();
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 5; i++) {
 			
 			
 			Rabbit animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
@@ -43,10 +43,10 @@ public class Main {
 			AnimalHandler.addAnimal(animal);
 			Fox fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
 			AnimalHandler.addAnimal(fox);
-			fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(fox);
-			fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(fox);
+//			fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
+//			AnimalHandler.addAnimal(fox);
+//			fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
+//			AnimalHandler.addAnimal(fox);
 		}
 		
 		

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class Map {
 
-	public static final int numberOfNodesX = 30; //TODO öka storlek, kolla svart ruta.
-	public static final int numberOfNodesY = 30;
+	public static final int numberOfNodesX = 10; //TODO öka storlek, kolla svart ruta.
+	public static final int numberOfNodesY = 10;
 	private Node[][] mapElements;
 	// TODO implementera maxantal på en ruta
 	

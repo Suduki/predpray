@@ -27,7 +27,7 @@ public class DisplayHelper {
 	public static final int SCREEN_HEIGHT = 640;//480;
 	
 	private static RenderThread renderThread;
-	public static Thread renderThreadThread;
+	public Thread renderThreadThread;
 	
 
 	public DisplayHelper() {

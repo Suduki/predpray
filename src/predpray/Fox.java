@@ -16,7 +16,7 @@ public class Fox extends Animal {
 		super(map, positionX, positionY);
 		this.setColor(new float[] {1,0,0});
 		this.hunger = hungerAtBirth;
-		this.fertilityAge = 20D;
+		this.fertilityAge = 100D;
 	}
 	
 	public Fox(Fox mother, Fox father) {

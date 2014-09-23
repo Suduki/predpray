@@ -15,6 +15,9 @@ import org.lwjgl.opengl.*;
 
 public class Main {
 
+	private static final int INIT_NUMBER_OF_RABBITS = 200;
+	private static final int INIT_NUMBER_OF_FOXES = 15;
+	
 	public static DisplayHelper displayHelper;
 	private static Map map;
 
@@ -24,31 +27,14 @@ public class Main {
 		
 		map = new Map();
 		displayHelper = new DisplayHelper();
-		for (int i = 0; i < 5; i++) {
-			
-			
+		for (int i = 0; i < INIT_NUMBER_OF_RABBITS; i++) {
 			Rabbit animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
 			AnimalHandler.addAnimal(animal);
-			animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(animal);
-			animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(animal);
-			animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(animal);
-			animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(animal);
-			animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(animal);
-			animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(animal);
+		}
+		for (int i = 0; i < INIT_NUMBER_OF_FOXES; i++) {
 			Fox fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
 			AnimalHandler.addAnimal(fox);
-//			fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-//			AnimalHandler.addAnimal(fox);
-//			fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-//			AnimalHandler.addAnimal(fox);
-		}
-		
+		}		
 		
 		
 		

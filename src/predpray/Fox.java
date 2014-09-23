@@ -7,8 +7,8 @@ public class Fox extends Animal {
 	
 	
 	private int hungerConsumedWhenMating = 10;
-	private int hungerAtBirth = 40;
-	private int starvationLimitForDeath = 100;
+	private int hungerAtBirth = 10;
+	private int starvationLimitForDeath = 20;
 	
 	private Double dontMateDueToHunger = 0.5D; 
 	

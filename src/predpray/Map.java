@@ -66,6 +66,25 @@ public class Map {
 		return mapElements[animal.getPositionX()][animal.getPositionY()].getAnimalsInNode();
 	}
 
+	public Animal[] getAnimalsAtNode(int positionX, int positionY) {
+		return mapElements[positionX][positionY].getAnimalsInNode();
+	}
+	public Animal[] getAnimalsAtNode(Node n) {
+		return n.getAnimalsInNode();
+	}
+	public boolean nodeContainsRabbits(int positionX, int positionY) {
+		return mapElements[positionX][positionY].containsRabbits();
+	}
+	public int correctX(int positionX) {
+		if (positionX == numberOfNodesX) return 0; 
+		else if (positionX == -1) return numberOfNodesX-1;
+		else return positionX;
+	}
+	public int correctY(int positionY) {
+		if (positionY == numberOfNodesY) return 0; 
+		else if (positionY == -1) return numberOfNodesY-1;
+		else return positionY;
+	}
 //	public ArrayList<Node> findNodesContainingInteractingAnimals() {
 //		ArrayList<Node> interactingAnimals = new ArrayList<>();
 //		for (int i = 0; i < numberOfNodesX; i++) {

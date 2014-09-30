@@ -15,8 +15,8 @@ import org.lwjgl.opengl.*;
 
 public class Main {
 
-	private static final int INIT_NUMBER_OF_RABBITS = 200;
-	private static final int INIT_NUMBER_OF_FOXES = 15;
+	private static final int INIT_NUMBER_OF_RABBITS = 50;
+	private static final int INIT_NUMBER_OF_FOXES = 5;
 	
 	public static DisplayHelper displayHelper;
 	private static Map map;
@@ -60,7 +60,7 @@ public class Main {
 			/*
 			 * let each animal firstly move, then interact
 			 */
-			AnimalHandler.moveAllAnimalsOneStepRandomDirectionAndInteract();
+			AnimalHandler.moveAllAnimalsOneStepAndInteract();
 //			ArrayList<Node> nodesWithInteractingAnimals = map.findNodesContainingInteractingAnimals();
 //			
 //			for (Node nodeWithInteractingAnimals : nodesWithInteractingAnimals) {

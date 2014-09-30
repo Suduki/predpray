@@ -61,6 +61,19 @@ public class AnimalHandler {
 		}
 	}
 
+	public static void moveAllAnimalsOneStepAndInteract() {
+		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+			Animal animal = allAnimals[i];
+			if (animal != null) {
+				Main.getMap().removeAnimalFromNode(animal);
+				animal.move();
+				interact(Main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);
+				Main.getMap().addAnimalToNode(animal);
+				animal.age();
+			}
+		}
+	}
+	
 	public static void interact(Animal[] sleepingAnimals, Animal walker) {
 
 

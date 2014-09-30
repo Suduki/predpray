@@ -84,4 +84,15 @@ public class Node {
 		return displayHeight;
 	}
 
+	public boolean containsRabbits() {
+		int i = 0;
+		while(i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS) {
+			if (animalsInNode[i] != null && animalsInNode[i].getClass() == Rabbit.class) {
+				return true;
+			}
+			i++;
+		}
+		return false;
+	}
+
 }

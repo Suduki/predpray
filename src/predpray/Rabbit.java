@@ -8,6 +8,11 @@ public class Rabbit extends Animal {
 		this.setColor(new float[] {0,1,0});
 		this.fertilityAge = 4D;
 	}
+
+	@Override
+	public boolean move() {
+		return moveOneStepInCompletelyRandomDirection();
+	}
 	
 	
 }

@@ -7,11 +7,11 @@ import java.util.Random;
 
 public abstract class Animal {
 
-	public static final int DIRECTION_EAST = 0;
-	public static final int DIRECTION_WEST = 1;
-	public static final int DIRECTION_NORTH = 2;
-	public static final int DIRECTION_SOUTH = 3;
-	public static final int DIRECTION_NONE = 4;
+	private static Random random = new Random();
+	
+	public enum DIRECTION {
+		EAST, WEST, NORTH, SOUTH, NONE
+	}
 	
 	// Between [0,1]
 	protected Double fertility;
@@ -48,29 +48,32 @@ public abstract class Animal {
 	}
 	
 	public boolean moveOneStepInCompletelyRandomDirection() {
-		Integer randomDirection = new Random().nextInt(5);
-		return this.moveOneStep(randomDirection);
+		Integer randomDirection = random.nextInt(5);
+		DIRECTION dir = DIRECTION.values()[randomDirection];
+		return this.moveOneStep(dir);
 	}
 	
-	public boolean moveOneStep(int direction) {
+	public abstract boolean move();
+	
+	public boolean moveOneStep(DIRECTION direction) {
 		switch (direction) {
-			case DIRECTION_EAST:
+			case EAST:
 				positionX ++;
 				positionX = Map.correct(positionX, positionY)[0];
 				break;
-			case DIRECTION_WEST:
+			case WEST:
 				positionX --;
 				positionX = Map.correct(positionX, positionY)[0];
 				break;
-			case DIRECTION_NORTH:
+			case NORTH:
 				positionY ++;
 				positionY = Map.correct(positionX, positionY)[1];
 				break;
-			case DIRECTION_SOUTH:
+			case SOUTH:
 				positionY --;
 				positionY = Map.correct(positionX, positionY)[1];
 				break;
-			case DIRECTION_NONE:
+			case NONE:
 				break;
 			default:
 				return false;

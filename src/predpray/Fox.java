@@ -6,8 +6,8 @@ public class Fox extends Animal {
 	private int hunger;
 	
 	
-	private int hungerConsumedWhenMating = 10;
-	private int hungerAtBirth = 10;
+	private int hungerConsumedWhenMating = 5;
+	private int hungerAtBirth = 5;
 	private int starvationLimitForDeath = 20;
 	
 	private Double dontMateDueToHunger = 0.5D; 
@@ -16,7 +16,7 @@ public class Fox extends Animal {
 		super(map, positionX, positionY);
 		this.setColor(new float[] {1,0,0});
 		this.hunger = hungerAtBirth;
-		this.fertilityAge = 100D;
+		this.fertilityAge = 10D;
 	}
 	
 	public Fox(Fox mother, Fox father) {
@@ -58,7 +58,25 @@ public class Fox extends Animal {
 //			((Fox) mother).setHunger(((Fox) mother).getHunger() + ((Fox) mother).hungerConsumedWhenMating);
 ////		}
 //	}
-	
+	public boolean move() {
+		return moveOneStep(sniff());
+	}
+	public DIRECTION sniff() {
+		System.out.println(positionX + "    y="+ positionY);
+		if(map.nodeContainsRabbits(map.correctX(positionX + 1), positionY)) {
+			return DIRECTION.EAST;
+		}
+		if(map.nodeContainsRabbits(map.correctX(positionX - 1), positionY)) {
+			return DIRECTION.WEST;
+		}
+		if(map.nodeContainsRabbits(positionX, map.correctY(positionY + 1))) {
+			return DIRECTION.NORTH;
+		}
+		if(map.nodeContainsRabbits(positionX, map.correctY(positionY - 1))) {
+			return DIRECTION.SOUTH;
+		}
+		return DIRECTION.NONE;
+	}
 	
 	private void setHunger(int hunger) {
 		this.hunger = hunger;
@@ -78,4 +96,5 @@ public class Fox extends Animal {
 			this.die();
 		}
 	}
+	
 }

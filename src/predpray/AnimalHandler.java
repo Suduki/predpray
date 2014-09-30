@@ -5,7 +5,7 @@ import java.util.Random;
 
 
 public class AnimalHandler {
-	public final static int TOTAL_NUMBER_OF_ALLOWED_ANIMALS = 1000;
+	public final static int TOTAL_NUMBER_OF_ALLOWED_ANIMALS = 5000;
 	private static int totalNumberOfLivingAnimals = 0;
 	private static int totalNumberOfLivingRabbits = 0;
 	private static int totalNumberOfLivingFoxes = 0;
@@ -43,7 +43,16 @@ public class AnimalHandler {
 	public static synchronized void renderAllAnimals() {
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
 			if (allAnimals[i] != null) {
-				DisplayHelper.render(allAnimals[i]);
+				if (allAnimals[i].getClass() == Rabbit.class) {
+					DisplayHelper.render(allAnimals[i]);
+				}
+			}
+		}
+		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+			if (allAnimals[i] != null) {
+				if (allAnimals[i].getClass() == Fox.class) {
+					DisplayHelper.render(allAnimals[i]);
+				}
 			}
 		}
 	}
@@ -124,7 +133,20 @@ public class AnimalHandler {
 	}
 
 	public static int getNumberOfAnimals() {
-		// TODO Auto-generated method stub
 		return totalNumberOfLivingAnimals;
+	}
+	public static int getNumberOfRabbits() {
+		int number =0;
+		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+			if (allAnimals[i] != null && allAnimals[i].getClass() == Rabbit.class) number++;
+		}
+		return number;
+	}
+	public static int getNumberOfFoxes() {
+		int number =0;
+		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+			if (allAnimals[i] != null && allAnimals[i].getClass() == Fox.class) number++;
+		}
+		return number;
 	}
 }

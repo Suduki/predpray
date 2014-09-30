@@ -95,4 +95,15 @@ public class Node {
 		return false;
 	}
 
+	public boolean containsFoxes() {
+		int i = 0;
+		while(i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS) {
+			if (animalsInNode[i] != null && animalsInNode[i].getClass() == Fox.class) {
+				return true;
+			}
+			i++;
+		}
+		return false;
+	}
+
 }

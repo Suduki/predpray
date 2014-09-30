@@ -54,6 +54,8 @@ public class Map {
 		return new int[] {positionX, positionY};
 	}
 
+
+	
 	public void removeAnimalFromNode(Animal animal) {
 		mapElements[animal.getPositionX()][animal.getPositionY()].removeAnimalFromNode(animal);
 	}
@@ -74,6 +76,9 @@ public class Map {
 	}
 	public boolean nodeContainsRabbits(int positionX, int positionY) {
 		return mapElements[positionX][positionY].containsRabbits();
+	}
+	public boolean nodeContainsFoxes(int positionX, int positionY) {
+		return mapElements[positionX][positionY].containsFoxes();
 	}
 	public int correctX(int positionX) {
 		if (positionX == numberOfNodesX) return 0; 
@@ -96,4 +101,5 @@ public class Map {
 //		}
 //		return interactingAnimals;
 //	}
+
 }

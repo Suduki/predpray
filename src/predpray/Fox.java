@@ -6,11 +6,11 @@ public class Fox extends Animal {
 	private int hunger;
 	
 	
-	private int hungerConsumedWhenMating = 5;
-	private int hungerAtBirth = 5;
-	private int starvationLimitForDeath = 20;
+	private int hungerConsumedWhenMating = 3;
+	private int hungerAtBirth = 1;
+	private int starvationLimitForDeath = 8;
 	
-	private Double dontMateDueToHunger = 0.5D; 
+	private Double dontMateDueToHunger = 0.8D; 
 	
 	public Fox(Map map, Integer positionX, Integer positionY) {
 		super(map, positionX, positionY);
@@ -59,24 +59,35 @@ public class Fox extends Animal {
 ////		}
 //	}
 	public boolean move() {
-		return moveOneStep(sniff());
+		DIRECTION dirToRabbit = sniffForRabbit();
+		DIRECTION dirToFox = sniffForFox();
+		
+		if (dirToFox != DIRECTION.NONE && isFertile()) {
+			return moveOneStep(dirToFox);	
+		}
+		if (dirToRabbit == DIRECTION.NONE) {
+			return moveOneStepInCompletelyRandomDirection();
+		}
+		return moveOneStep(dirToRabbit);
 	}
-	public DIRECTION sniff() {
-		System.out.println(positionX + "    y="+ positionY);
-		if(map.nodeContainsRabbits(map.correctX(positionX + 1), positionY)) {
+	private DIRECTION sniffForRabbitFromPosition(int x, int y) {
+		if(map.nodeContainsRabbits(map.correctX(x + 1), y)) {
 			return DIRECTION.EAST;
 		}
-		if(map.nodeContainsRabbits(map.correctX(positionX - 1), positionY)) {
+		if(map.nodeContainsRabbits(map.correctX(x - 1), y)) {
 			return DIRECTION.WEST;
 		}
-		if(map.nodeContainsRabbits(positionX, map.correctY(positionY + 1))) {
+		if(map.nodeContainsRabbits(x, map.correctY(y + 1))) {
 			return DIRECTION.NORTH;
 		}
-		if(map.nodeContainsRabbits(positionX, map.correctY(positionY - 1))) {
+		if(map.nodeContainsRabbits(x, map.correctY(y - 1))) {
 			return DIRECTION.SOUTH;
 		}
 		return DIRECTION.NONE;
+	
 	}
+	
+
 	
 	private void setHunger(int hunger) {
 		this.hunger = hunger;

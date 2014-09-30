@@ -1,5 +1,12 @@
 package predpray;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,26 +22,27 @@ import org.lwjgl.opengl.*;
 
 public class Main {
 
-	private static final int INIT_NUMBER_OF_RABBITS = 50;
-	private static final int INIT_NUMBER_OF_FOXES = 5;
+	private static final int INIT_NUMBER_OF_RABBITS = 250;
+	private static final int INIT_NUMBER_OF_FOXES = 20;
+	private static final int MIN_NUMBER_OF_RABBITS = 20;
+	private static final int MIN_NUMBER_OF_FOXES = 6;
 	
 	public static DisplayHelper displayHelper;
 	private static Map map;
+	private static Random random = new Random();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		
 		
 		map = new Map();
 		displayHelper = new DisplayHelper();
 		for (int i = 0; i < INIT_NUMBER_OF_RABBITS; i++) {
-			Rabbit animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(animal);
+			 createRandomRabbit();
 		}
 		for (int i = 0; i < INIT_NUMBER_OF_FOXES; i++) {
-			Fox fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-			AnimalHandler.addAnimal(fox);
-		}		
+			createRandomFox();
+		}
 		
 		
 		
@@ -56,6 +64,9 @@ public class Main {
 			e.printStackTrace();
 		}
 		int iteration = 0;
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+	            new FileOutputStream("filename.txt"), "utf-8"));
+		try {
 		while (displayHelper.renderThreadThread.isAlive()) {
 			/*
 			 * let each animal firstly move, then interact
@@ -68,15 +79,30 @@ public class Main {
 //				
 //			}
 			iteration ++;
-			if(iteration % 4 == 0) {
+			if(iteration % 1 == 0) {
 				int numberOfAnimals = AnimalHandler.getNumberOfAnimals();
-				System.out.println("numberOfAnimals = " + numberOfAnimals);
+				int numberOfFoxes = AnimalHandler.getNumberOfFoxes();
+				int numberOfRabbits = AnimalHandler.getNumberOfRabbits();
+				writer.write(numberOfRabbits + " " + numberOfFoxes + "\n");
+				System.out.println("numberOfAnimals = " + numberOfAnimals + 
+						",    foxes = " + numberOfFoxes + ",   rabbits = " + numberOfRabbits);
+				while (numberOfFoxes < MIN_NUMBER_OF_FOXES || numberOfRabbits > 30 * numberOfFoxes) {
+					System.out.print("Adding fox.");
+					createRandomFox();
+					numberOfFoxes++;
+				}
+				if (numberOfRabbits < MIN_NUMBER_OF_RABBITS)
+					System.out.println("   Adding " + (MIN_NUMBER_OF_RABBITS - numberOfRabbits) + "Rabz.");
+				while (numberOfRabbits < MIN_NUMBER_OF_RABBITS) {
+					createRandomRabbit();
+					numberOfRabbits++;
+				}
 			}
 			
 //			animal.moveOneStepInCompletelyRandomDirection();
 //			animal2.moveOneStepInCompletelyRandomDirection();
 			try {
-				Thread.sleep(200);
+				Thread.sleep(1);
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -97,18 +123,26 @@ public class Main {
 				}
 			}
 			
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
 		}
+		}
+		catch ( IllegalStateException e) {
+			e.printStackTrace();
+		}
+		writer.close();
 
 		displayHelper.exit();
+		
 	}
 	
-	
+
+	private static void createRandomFox() {
+		Fox fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
+		AnimalHandler.addAnimal(fox);
+	}
+	private static void createRandomRabbit() {
+		Rabbit animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
+		AnimalHandler.addAnimal(animal);		
+	}
 
 	public static Map getMap() {
 		return map;

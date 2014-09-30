@@ -81,7 +81,54 @@ public abstract class Animal {
 		
 		return true;
 	}
-
+	public DIRECTION oppositeDirection(DIRECTION d) {
+		if (d == DIRECTION.EAST) {
+			return DIRECTION.WEST;
+		}
+		else if (d == DIRECTION.WEST) {
+			return DIRECTION.EAST;
+		}
+		else if (d == DIRECTION.NORTH) {
+			return DIRECTION.SOUTH;
+		}
+		else if (d == DIRECTION.SOUTH) {
+			return DIRECTION.NORTH;
+		}
+		else {
+			System.out.println("Direction = NONE in Animal.oppositeDirection()!");
+			return DIRECTION.NONE;
+		}
+	}
+	public DIRECTION sniffForFox() {
+		if (map.nodeContainsFoxes(map.correctX(positionX + 1), positionY)) {
+			return DIRECTION.EAST;
+		}
+		if (map.nodeContainsFoxes(map.correctX(positionX - 1), positionY)) {
+			return DIRECTION.WEST;
+		}
+		if (map.nodeContainsFoxes(positionX, map.correctY(positionY + 1))) {
+			return DIRECTION.NORTH;
+		}
+		if (map.nodeContainsFoxes(positionX, map.correctY(positionY - 1))) {
+			return DIRECTION.SOUTH;
+		}
+		return DIRECTION.NONE;
+	}
+	public DIRECTION sniffForRabbit() {
+		if(map.nodeContainsRabbits(map.correctX(positionX + 1), positionY)) {
+			return DIRECTION.EAST;
+		}
+		if(map.nodeContainsRabbits(map.correctX(positionX - 1), positionY)) {
+			return DIRECTION.WEST;
+		}
+		if(map.nodeContainsRabbits(positionX, map.correctY(positionY + 1))) {
+			return DIRECTION.NORTH;
+		}
+		if(map.nodeContainsRabbits(positionX, map.correctY(positionY - 1))) {
+			return DIRECTION.SOUTH;
+		}
+		return DIRECTION.NONE;
+	}
 	public void die() {
 		AnimalHandler.killAnimal(this);
 	}
@@ -97,7 +144,7 @@ public abstract class Animal {
 		age ++;
 		sinceLastBaby ++;
 		if (isFertile()) {
-			color[2] = 1;
+			color[2] = 0.5f;
 		}
 		else {
 			color[2] = 0;

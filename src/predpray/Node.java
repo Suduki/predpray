@@ -1,12 +1,11 @@
 package predpray;
 
-import java.util.ArrayList;
 
 
 public class Node {
 	
-	private static final int TOTAL_NUMBER_OF_ALLOWED_ANIMALS = AnimalHandler.TOTAL_NUMBER_OF_ALLOWED_ANIMALS;
-
+	public static final int MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE = 5;
+	
 	private int positionX;
 	private int positionY;
 	public static float displayWidth = DisplayHelper.SCREEN_WIDTH / Map.numberOfNodesX;
@@ -19,15 +18,17 @@ public class Node {
 	public Node(int x, int y) {
 		positionX = x;
 		positionY = y;
-		animalsInNode = new Animal[TOTAL_NUMBER_OF_ALLOWED_ANIMALS];
+		animalsInNode = new Animal[MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE];
 	}
 	
-	public void addAnimalToNode(Animal animal) {
-		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+	public boolean addAnimalToNode(Animal animal) {
+		for (int i = 0; i < MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE; i++) {
 			if (animalsInNode[i] == null) {
 				animalsInNode[i] = animal;
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	/**
@@ -35,7 +36,7 @@ public class Node {
 	 * @param animal
 	 */
 	public void removeAnimalFromNode(Animal animal) {
-		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+		for (int i = 0; i < MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE; i++) {
 			if (animalsInNode[i] != null && animalsInNode[i].equals(animal)) {
 				animalsInNode[i] = null;
 			}
@@ -86,7 +87,7 @@ public class Node {
 
 	public boolean containsRabbits() {
 		int i = 0;
-		while(i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS) {
+		while(i < MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE) {
 			if (animalsInNode[i] != null && animalsInNode[i].getClass() == Rabbit.class) {
 				return true;
 			}
@@ -97,11 +98,20 @@ public class Node {
 
 	public boolean containsFoxes() {
 		int i = 0;
-		while(i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS) {
+		while(i < MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE) {
 			if (animalsInNode[i] != null && animalsInNode[i].getClass() == Fox.class) {
 				return true;
 			}
 			i++;
+		}
+		return false;
+	}
+
+	public boolean hasRoomForMoreAnimals() {
+		for (int i = 0; i < MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE; i++) {
+			if (animalsInNode[i] == null) {
+				return true;
+			}
 		}
 		return false;
 	}

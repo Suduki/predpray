@@ -3,25 +3,28 @@ package predpray;
 
 public class Fox extends Animal {
 
-	private int hunger;
+	private double hunger;
 	
+	private static double starvationLimitForDeath = 20d;
+	public static double HUNGER_AT_CANNIBALISM = starvationLimitForDeath-3d;
+	private double hungerConsumedWhenMating = 10d;
 	
-	private int hungerConsumedWhenMating = 3;
-	private int hungerAtBirth = 1;
-	private int starvationLimitForDeath = 8;
+	private double hungerAtBirth = hungerConsumedWhenMating;
 	
-	private Double dontMateDueToHunger = 0.8D; 
+	private double dontMateDueToHunger = 0.5d; 
+
 	
 	public Fox(Map map, Integer positionX, Integer positionY) {
 		super(map, positionX, positionY);
+		this.walkThroughEdge = true;
 		this.setColor(new float[] {1,0,0});
 		this.hunger = hungerAtBirth;
-		this.fertilityAge = 10D;
+		this.fertilityAge = 2D;
+		
 	}
 	
 	public Fox(Fox mother, Fox father) {
 		super(Main.getMap(), mother.getPositionX(), mother.getPositionY());
-		
 	}
 	
 	/**
@@ -36,13 +39,20 @@ public class Fox extends Animal {
 	
 	
 	public void eat(Animal animalToEat) {
-		hunger = 0;
+		if (animalToEat instanceof Fox)
+			hunger = hunger - (((Fox)animalToEat).starvationLimitForDeath - ((Fox)animalToEat).getHunger());
+		if (animalToEat instanceof Rabbit)
+			hunger = hunger - ((Rabbit)animalToEat).energy;
+		if (hunger < 0) hunger = 0D;
+//		hunger = 0d;
+		
 		animalToEat.die();
 	}
 	
 	@Override
-	public boolean isFertile() {
-		if (super.isFertile() && hunger < starvationLimitForDeath * dontMateDueToHunger) {
+	public boolean isFertile() { 
+		if (age > fertilityAge && sinceLastBaby > fertilityAge 
+				&& hunger < starvationLimitForDeath * dontMateDueToHunger - 1) {
 			return true;
 		}
 		else {
@@ -59,48 +69,50 @@ public class Fox extends Animal {
 ////		}
 //	}
 	public boolean move() {
-		DIRECTION dirToRabbit = sniffForRabbit();
-		DIRECTION dirToFox = sniffForFox();
 		
-		if (dirToFox != DIRECTION.NONE && isFertile()) {
-			return moveOneStep(dirToFox);	
+		Direction dirToFox = sniffForFox();
+		
+		if (dirToFox != Direction.NONE && isFertile()) {
+			return moveOneStep(dirToFox);
 		}
-		if (dirToRabbit == DIRECTION.NONE) {
+		
+		Direction dirToRabbit = sniffForRabbit();
+		if (dirToRabbit == Direction.NONE) {
 			return moveOneStepInCompletelyRandomDirection();
 		}
+		
 		return moveOneStep(dirToRabbit);
 	}
-	private DIRECTION sniffForRabbitFromPosition(int x, int y) {
-		if(map.nodeContainsRabbits(map.correctX(x + 1), y)) {
-			return DIRECTION.EAST;
+	private Direction sniffForRabbitFromPosition(int x, int y) {
+		if(map.nodeContainsRabbits(map.correctX(x + 1, walkThroughEdge), y)) {
+			return Direction.EAST;
 		}
-		if(map.nodeContainsRabbits(map.correctX(x - 1), y)) {
-			return DIRECTION.WEST;
+		if(map.nodeContainsRabbits(map.correctX(x - 1, walkThroughEdge), y)) {
+			return Direction.WEST;
 		}
-		if(map.nodeContainsRabbits(x, map.correctY(y + 1))) {
-			return DIRECTION.NORTH;
+		if(map.nodeContainsRabbits(x, map.correctY(y + 1, walkThroughEdge))) {
+			return Direction.NORTH;
 		}
-		if(map.nodeContainsRabbits(x, map.correctY(y - 1))) {
-			return DIRECTION.SOUTH;
+		if(map.nodeContainsRabbits(x, map.correctY(y - 1, walkThroughEdge))) {
+			return Direction.SOUTH;
 		}
-		return DIRECTION.NONE;
+		return Direction.NONE;
 	
 	}
 	
 
 	
-	private void setHunger(int hunger) {
+	public void setHunger(Double hunger) {
 		this.hunger = hunger;
 	}
 
-	private int getHunger() {
+	public Double getHunger() {
 		return hunger;
 	}
 
 	@Override
 	public void age() {
 		super.age();
-		
 		
 		hunger ++;
 		if (hunger > starvationLimitForDeath) {

@@ -1,15 +1,18 @@
 package predpray;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 
 public abstract class Animal {
 
 	private static Random random = new Random();
+	protected boolean walkThroughEdge;
 	
-	public enum DIRECTION {
+	public enum Direction {
 		EAST, WEST, NORTH, SOUTH, NONE
 	}
 	
@@ -21,6 +24,8 @@ public abstract class Animal {
 	protected Double fertilityAge;
 	protected Integer age;
 	protected Integer sinceLastBaby;
+	
+	protected abstract boolean isFertile();
 	
 	Map map;
 	
@@ -49,29 +54,51 @@ public abstract class Animal {
 	
 	public boolean moveOneStepInCompletelyRandomDirection() {
 		Integer randomDirection = random.nextInt(5);
-		DIRECTION dir = DIRECTION.values()[randomDirection];
+		Direction dir = Direction.values()[randomDirection];
 		return this.moveOneStep(dir);
 	}
 	
 	public abstract boolean move();
 	
-	public boolean moveOneStep(DIRECTION direction) {
+	public boolean moveOneStep(Direction direction) {
 		switch (direction) {
 			case EAST:
-				positionX ++;
-				positionX = Map.correct(positionX, positionY)[0];
+				if (!map.hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX + 1, positionY, walkThroughEdge))) {
+					return false;
+				} 
+				else {
+					positionX ++;
+					positionX = Map.correctCoordinates(positionX, positionY, walkThroughEdge)[0];
+				}
 				break;
 			case WEST:
-				positionX --;
-				positionX = Map.correct(positionX, positionY)[0];
+				if (!map.hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX - 1, positionY, walkThroughEdge))) {
+					return false;
+				} 
+				else {
+					positionX --;
+					positionX = Map.correctCoordinates(positionX, positionY, walkThroughEdge)[0];
+				}
+				
 				break;
 			case NORTH:
-				positionY ++;
-				positionY = Map.correct(positionX, positionY)[1];
+				if (!map.hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY + 1, walkThroughEdge))) {
+					return false;
+				} 
+				else {
+					positionY ++;
+					positionY = Map.correctCoordinates(positionX, positionY, walkThroughEdge)[1];
+				}
+				
 				break;
 			case SOUTH:
-				positionY --;
-				positionY = Map.correct(positionX, positionY)[1];
+				if (!map.hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY - 1, walkThroughEdge))) {
+					return false;
+				} 
+				else {
+					positionY --;
+					positionY = Map.correctCoordinates(positionX, positionY, walkThroughEdge)[1];
+				}
 				break;
 			case NONE:
 				break;
@@ -81,64 +108,106 @@ public abstract class Animal {
 		
 		return true;
 	}
-	public DIRECTION oppositeDirection(DIRECTION d) {
-		if (d == DIRECTION.EAST) {
-			return DIRECTION.WEST;
+	public Direction oppositeDirection(Direction d) {
+		if (d == Direction.EAST) {
+			return Direction.WEST;
 		}
-		else if (d == DIRECTION.WEST) {
-			return DIRECTION.EAST;
+		else if (d == Direction.WEST) {
+			return Direction.EAST;
 		}
-		else if (d == DIRECTION.NORTH) {
-			return DIRECTION.SOUTH;
+		else if (d == Direction.NORTH) {
+			return Direction.SOUTH;
 		}
-		else if (d == DIRECTION.SOUTH) {
-			return DIRECTION.NORTH;
+		else if (d == Direction.SOUTH) {
+			return Direction.NORTH;
 		}
 		else {
-			System.out.println("Direction = NONE in Animal.oppositeDirection()!");
-			return DIRECTION.NONE;
+			return Direction.NONE;
 		}
 	}
-	public DIRECTION sniffForFox() {
-		if (map.nodeContainsFoxes(map.correctX(positionX + 1), positionY)) {
-			return DIRECTION.EAST;
+	public Direction sniffForFox() {
+		
+		// The search order
+		ArrayList<Integer> order = new ArrayList<Integer>();
+		
+		order.add(new Integer(0));
+		order.add(new Integer(1));
+		order.add(new Integer(2));
+		order.add(new Integer(3));
+		
+		Collections.shuffle(order);
+		
+		for (Integer i : order) {
+			switch (i.intValue()) {
+			case 0:
+				if (map.nodeContainsFoxes(map.correctX(positionX + 1, walkThroughEdge), positionY)) {
+					return Direction.EAST;
+				}
+				break;
+			case 1:
+				if (map.nodeContainsFoxes(map.correctX(positionX - 1, walkThroughEdge), positionY)) {
+					return Direction.WEST;
+				}
+				break;
+			case 2:
+				if (map.nodeContainsFoxes(positionX, map.correctY(positionY + 1, walkThroughEdge))) {
+					return Direction.NORTH;
+				}
+			case 3:
+				if (map.nodeContainsFoxes(positionX, map.correctY(positionY - 1, walkThroughEdge))) {
+					return Direction.SOUTH;
+				}
+			}
 		}
-		if (map.nodeContainsFoxes(map.correctX(positionX - 1), positionY)) {
-			return DIRECTION.WEST;
-		}
-		if (map.nodeContainsFoxes(positionX, map.correctY(positionY + 1))) {
-			return DIRECTION.NORTH;
-		}
-		if (map.nodeContainsFoxes(positionX, map.correctY(positionY - 1))) {
-			return DIRECTION.SOUTH;
-		}
-		return DIRECTION.NONE;
+		
+		return Direction.NONE;
 	}
-	public DIRECTION sniffForRabbit() {
-		if(map.nodeContainsRabbits(map.correctX(positionX + 1), positionY)) {
-			return DIRECTION.EAST;
+	public Direction sniffForRabbit() {
+		// The search order
+		ArrayList<Integer> order = new ArrayList<Integer>();
+		
+		order.add(new Integer(0));
+		order.add(new Integer(1));
+		order.add(new Integer(2));
+		order.add(new Integer(3));
+		
+		Collections.shuffle(order);
+		
+		for (Integer i : order) {
+			switch (i.intValue()) {
+			case 0:
+				if (map.nodeContainsRabbits(map.correctX(positionX + 1, walkThroughEdge), positionY)) {
+					return Direction.EAST;
+				}
+				break;
+			case 1:
+				if (map.nodeContainsRabbits(map.correctX(positionX - 1, walkThroughEdge), positionY)) {
+					return Direction.WEST;
+				}
+				break;
+			case 2:
+				if (map.nodeContainsRabbits(positionX, map.correctY(positionY + 1, walkThroughEdge))) {
+					return Direction.NORTH;
+				}
+			case 3:
+				if (map.nodeContainsRabbits(positionX, map.correctY(positionY - 1, walkThroughEdge))) {
+					return Direction.SOUTH;
+				}
+			}
 		}
-		if(map.nodeContainsRabbits(map.correctX(positionX - 1), positionY)) {
-			return DIRECTION.WEST;
-		}
-		if(map.nodeContainsRabbits(positionX, map.correctY(positionY + 1))) {
-			return DIRECTION.NORTH;
-		}
-		if(map.nodeContainsRabbits(positionX, map.correctY(positionY - 1))) {
-			return DIRECTION.SOUTH;
-		}
-		return DIRECTION.NONE;
+		
+		return Direction.NONE;
 	}
 	public void die() {
 		AnimalHandler.killAnimal(this);
 	}
 	
-	protected boolean isFertile() {
-		if (age > fertilityAge && sinceLastBaby > fertilityAge) {
-			return true;
-		}
-		return false;
-	}
+//	protected boolean isFertile() {
+//		if (age > fertilityAge && sinceLastBaby > fertilityAge) {
+//			return true;
+//		}
+//		return false;
+//	}
 	
 	public void age() {
 		age ++;
@@ -155,22 +224,32 @@ public abstract class Animal {
 		float red = new Random().nextFloat();
 		float blue = new Random().nextFloat();
 		float green = new Random().nextFloat();
-		
+
 		Animal father = this;
-		
+
+		// Let the child spawn at a random position
+		//		int positionForChildX = new Random().nextInt(Map.numberOfNodesX);
+		//		int positionForChildY = new Random().nextInt(Map.numberOfNodesY);
+
+		// Spawn at father's position (same as mother's)
+		int positionForChildX = father.positionX;
+		int positionForChildY = father.positionY;
+
 		if (father.isFertile() && mother.isFertile()) { //TODO Denna metod verkar sämst. Skriv om den till abstract!
 			Constructor<? extends Animal> constructor;
+
 			try {
 				constructor = father.getClass().
 						getConstructor(Map.class, Integer.class, Integer.class);
+
 				Animal child = constructor.newInstance(
-						Main.getMap(), father.positionX, father.positionY);
-				AnimalHandler.addAnimal(child);
+						Main.getMap(), positionForChildX, positionForChildY);
+				if (!AnimalHandler.addNewAnimal(child)) {
+					father.die();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			father.sinceLastBaby = 0;
-			
 		}
 		
 	}

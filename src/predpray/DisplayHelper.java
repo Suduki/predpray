@@ -23,8 +23,8 @@ import org.lwjgl.opengl.GL11;
 
 
 public class DisplayHelper {
-	public static final int SCREEN_WIDTH = 640; 
-	public static final int SCREEN_HEIGHT = 640;//480;
+	public static final int SCREEN_WIDTH = 1080; 
+	public static final int SCREEN_HEIGHT = 1080;//480;
 	
 	private static RenderThread renderThread;
 	public Thread renderThreadThread;

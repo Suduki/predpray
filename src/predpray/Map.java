@@ -1,14 +1,12 @@
 package predpray;
 
-import java.util.ArrayList;
 
 
 public class Map {
 
-	public static final int numberOfNodesX = 10; //TODO öka storlek, kolla svart ruta.
-	public static final int numberOfNodesY = 10;
+	public static final int numberOfNodesX = 128; //TODO öka storlek, kolla svart ruta.
+	public static final int numberOfNodesY = 128;
 	private Node[][] mapElements;
-	// TODO implementera maxantal på en ruta
 	
 	public Map() {
 		mapElements = new Node[numberOfNodesX][numberOfNodesY];
@@ -38,30 +36,44 @@ public class Map {
 	 * @param positionY
 	 * @return
 	 */
-	public static int[] correct(int positionX, int positionY) {
-		if (positionX == numberOfNodesX) {
-			positionX = 0;
+	public static int[] correctCoordinates(int positionX, int positionY, boolean walkThroughEdge) {
+		if(walkThroughEdge) {
+			if (positionX == numberOfNodesX) {
+				positionX = 0;
+			}
+			if (positionX == -1) {
+				positionX = numberOfNodesX - 1;
+			}
+			if (positionY == numberOfNodesY) {
+				positionY = 0;
+			}
+			if (positionY == -1) {
+				positionY = numberOfNodesY - 1;
+			}
 		}
-		if (positionX == -1) {
-			positionX = numberOfNodesX - 1;
-		}
-		if (positionY == numberOfNodesY) {
-			positionY = 0;
-		}
-		if (positionY == -1) {
-			positionY = numberOfNodesY-1;
+		else {
+			if (positionX == numberOfNodesX) {
+				positionX --;
+			}
+			if (positionX == -1) {
+				positionX = 0;
+			}
+			if (positionY == numberOfNodesY) {
+				positionY --;
+			}
+			if (positionY == -1) {
+				positionY = 0;
+			}
 		}
 		return new int[] {positionX, positionY};
 	}
-
-
 	
 	public void removeAnimalFromNode(Animal animal) {
 		mapElements[animal.getPositionX()][animal.getPositionY()].removeAnimalFromNode(animal);
 	}
 
-	public void addAnimalToNode(Animal animal) {
-		mapElements[animal.getPositionX()][animal.getPositionY()].addAnimalToNode(animal);
+	public boolean addAnimalToNode(Animal animal) {
+		return mapElements[animal.getPositionX()][animal.getPositionY()].addAnimalToNode(animal);
 	}
 
 	public Animal[] getAnimalsAtSameNodeAsOtherAnimal(Animal animal) {
@@ -80,15 +92,29 @@ public class Map {
 	public boolean nodeContainsFoxes(int positionX, int positionY) {
 		return mapElements[positionX][positionY].containsFoxes();
 	}
-	public int correctX(int positionX) {
-		if (positionX == numberOfNodesX) return 0; 
-		else if (positionX == -1) return numberOfNodesX-1;
-		else return positionX;
+	public int correctX(int positionX, boolean walkThroughEdge) {
+		if (walkThroughEdge) {
+			if (positionX == numberOfNodesX) {return 0;} 
+			else if (positionX == -1) {return numberOfNodesX-1;}
+			else {return positionX;}
+		} 
+		else {
+			if (positionX == numberOfNodesX) {return numberOfNodesX-1; }
+			else if (positionX == -1) {return 0;}
+			else {return positionX;}
+		}	
 	}
-	public int correctY(int positionY) {
-		if (positionY == numberOfNodesY) return 0; 
-		else if (positionY == -1) return numberOfNodesY-1;
-		else return positionY;
+	public int correctY(int positionY, boolean walkThroughEdge) {
+		if (walkThroughEdge) {			
+			if (positionY == numberOfNodesY){ return 0; }
+			else if (positionY == -1) {return numberOfNodesY-1;}
+			else {return positionY;}
+		}
+		else {
+			if (positionY == numberOfNodesY) {return numberOfNodesY-1;} 
+			else if (positionY == -1) {return 0;}
+			else {return positionY;}
+		}
 	}
 //	public ArrayList<Node> findNodesContainingInteractingAnimals() {
 //		ArrayList<Node> interactingAnimals = new ArrayList<>();
@@ -101,5 +127,10 @@ public class Map {
 //		}
 //		return interactingAnimals;
 //	}
+
+	public boolean hasRoomForOneMoreAnimal(int[] coords) {
+		if (mapElements[coords[0]][coords[1]].hasRoomForMoreAnimals()) return true;
+		return false;
+	}
 
 }

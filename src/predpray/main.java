@@ -25,7 +25,7 @@ public class Main {
 	public static final int INIT_NUMBER_OF_RABBITS = 2000;
 	public static final int INIT_NUMBER_OF_FOXES = 300;
 	private static final int MIN_NUMBER_OF_RABBITS = 1000;
-	private static final int MIN_NUMBER_OF_FOXES = 30;
+	private static final int MIN_NUMBER_OF_FOXES = 300;
 	
 	public static DisplayHelper displayHelper;
 	private static Map map;
@@ -86,7 +86,7 @@ public class Main {
 				writer.write(numberOfRabbits + " " + numberOfFoxes + "\n");
 				System.out.println("numberOfAnimals = " + numberOfAnimals + 
 						",    foxes = " + numberOfFoxes + ",   rabbits = " + numberOfRabbits);
-				while (numberOfFoxes < MIN_NUMBER_OF_FOXES || numberOfRabbits > 90 * numberOfFoxes) {
+				while (numberOfFoxes < MIN_NUMBER_OF_FOXES || numberOfRabbits > 9000 * numberOfFoxes) {
 					System.out.print("Adding fox.");
 					createRandomFox();
 					numberOfFoxes++;
@@ -101,12 +101,12 @@ public class Main {
 			
 //			animal.moveOneStepInCompletelyRandomDirection();
 //			animal2.moveOneStepInCompletelyRandomDirection();
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_0)) { 
 				System.out.println("KEY 0 nedtryckt!");
 				displayHelper.exit();

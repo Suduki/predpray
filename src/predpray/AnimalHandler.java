@@ -1,6 +1,6 @@
 package predpray;
 
-import static predpray.Constants.TOTAL_NUMBER_OF_ALLOWED_ANIMALS;
+import static predpray.Constants.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,7 +73,7 @@ public class AnimalHandler {
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
 			order.add(i);
 		}
-		Collections.shuffle(order);
+		Collections.shuffle(order, RANDOM);
 		
 		for (Integer i : order) {
 			Animal animal = allAnimals[i];
@@ -92,7 +92,7 @@ public class AnimalHandler {
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
 			order.add(i);
 		}
-		Collections.shuffle(order);
+		Collections.shuffle(order, RANDOM);
 		
 		for (Integer i : order) {
 			Animal animal = allAnimals[i];
@@ -102,6 +102,10 @@ public class AnimalHandler {
 				main.getMap().addAnimalToNode(animal);
 				interact(main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);					
 				
+				if (animal instanceof Rabbit)
+				{
+					((Rabbit) animal).eatGrass();
+				}
 				animal.age();
 			}
 		}

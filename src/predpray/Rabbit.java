@@ -5,42 +5,71 @@ package predpray;
 public class Rabbit extends Animal {
 	
 	public double energy; 
+	private static final double HUNGER_LIMIT_SEARCH_FOR_FOOD = 25d;
+	private static final double HUNGER_LIMIT_DEATH = 50d;
+	private static final double HUNGER_LIMIT_FERTILE = 10d;
+	private static final double HUNGER_CONSUMED_WHEN_MATING = 10d;
+	private static double HUNGER_AT_BIRTH = HUNGER_LIMIT_DEATH - HUNGER_CONSUMED_WHEN_MATING;
 	
-	public Rabbit(Map map, Integer positionX, Integer positionY) {
-		super(map, positionX, positionY);
+	public Rabbit(Integer positionX, Integer positionY) {
+		super(positionX, positionY);
 		this.walkThroughEdge = true;
-		this.setColor(new float[] {0,1,0});
+		this.color = new Color(0,0,1);
 		this.fertilityAge = 20D;
 		this.energy = 50D;
 	}
 
 	@Override
 	public boolean move() {
-		Direction directionToRabbit = sniffForRabbit();
-		Direction directionToFox = sniffForFox();
-		
-		if(directionToFox == Direction.NONE) {
-			// No fox nearby
-			if (directionToRabbit != Direction.NONE && isFertile()) {
-				// Found a friend, and I am fertile. Let's find the friend!
-				return moveOneStep(directionToRabbit);
-			}
-			// No animal nearby
-			return moveOneStepInCompletelyRandomDirection();
-		}
-		else {
-			// Fox nearby!
+		Direction directionToFox;
+		if ((directionToFox = sniffForFox()) != Direction.NONE)
+		{
+			// Fox nearby
 			return moveOneStep(oppositeDirection(directionToFox));
 		}
-		
+		else
+		{
+			Direction directionToRabbit;
+			// No fox nearby!
+			if (isFertile() && (directionToRabbit = sniffForRabbit()) != Direction.NONE)
+			{
+				// Smelling a fluffy friend, and I am fertile. Let's find the friend!
+				return moveOneStep(directionToRabbit);
+			}
+			return moveOneStepInCompletelyRandomDirection();
+		}
 	}
 
 	@Override
-	protected boolean isFertile() {
-		this.energy = new Double(sinceLastBaby);
-		if(age > fertilityAge && sinceLastBaby > fertilityAge)
-			return true;
-		return false;
+	protected double getHungerLimitDeath() {
+		return HUNGER_LIMIT_DEATH;
+	}
+
+	@Override
+	protected double getHungerLimitSearchForFood() {
+		return HUNGER_LIMIT_SEARCH_FOR_FOOD;
+	}
+
+	@Override
+	protected double getHungerLimitFertile() {
+		return HUNGER_LIMIT_FERTILE;
+	}
+
+	@Override
+	protected double getHungerConsumedWhenMating() {
+		return HUNGER_CONSUMED_WHEN_MATING;
+	}
+
+	@Override
+	protected double getHungerAtBirth() {
+		return HUNGER_AT_BIRTH;
+	}
+
+	public void eatGrass() {
+
+		
+//		public int positionX;
+//		public int positionY;
 	}
 	
 	

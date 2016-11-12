@@ -13,19 +13,21 @@ public class Node {
 	private int positionY;
 	private Scent scentRabbit;
 	private Scent scentFox;
-	private int grass;
+	private Grass grass;
 	public static float displayWidth = DisplayHelper.SCREEN_WIDTH / Map.numberOfNodesX;
 	public static float displayHeight = DisplayHelper.SCREEN_HEIGHT / Map.numberOfNodesY;
 	private Animal[] animalsInNode;
-	
+	private Color color;
 	
 //	public static final int MAXIMUM_NUMBER_OF_ANIMALS = 10;
 	
 	public Node(int x, int y) {
 		positionX = x;
 		positionY = y;
+		grass = new Grass(0);
 		scentRabbit = new Scent(0, 0);
 		scentFox = new Scent(0, 0);
+		color = new Color(0f, 0f, 0f);
 		animalsInNode = new Animal[MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE];
 	}
 	
@@ -88,9 +90,6 @@ public class Node {
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 
 				screenPositionX, screenPositionY + displayHeight); 
-//		if (!occupiedWith.isEmpty()) {
-//			renderAnimalsInNode();
-//		}
 	}
 	
 	public void render() {
@@ -107,13 +106,7 @@ public class Node {
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 
 				screenPositionX, screenPositionY + displayHeight); 
-//		if (!occupiedWith.isEmpty()) {
-//			renderAnimalsInNode();
-//		}
 	}
-//	public void renderAnimalsInNode() {
-
-//	}
 	
 	public static float getDisplayWidth() {
 		return displayWidth;
@@ -166,7 +159,15 @@ public class Node {
 		return false;
 	}
 
-	public void updateSmell() {
+	public void update() {
+		updateGrass();
+		updateScent();
+	}
+	private void updateGrass() {
+		grass.grow();
+		color.append(grass);
+	}
+	private void updateScent() {
 
 		
 		if (containsFoxes()) 

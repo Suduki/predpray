@@ -3,26 +3,24 @@ package predpray;
 
 public class Fox extends Animal {
 
-	private double hunger;
 	private static final double HUNGER_LIMIT_SEARCH_FOR_FOOD = 25d;
 	private static final double HUNGER_LIMIT_DEATH = 50d;
 	private static final double HUNGER_LIMIT_FERTILE = 10d;
 	private static final double HUNGER_CONSUMED_WHEN_MATING = 10d;
-	private static double HUNGER_AT_BIRTH= HUNGER_CONSUMED_WHEN_MATING;
+	private static final double HUNGER_AT_BIRTH = HUNGER_LIMIT_DEATH - HUNGER_CONSUMED_WHEN_MATING;
 	
 
 	
-	public Fox(Map map, Integer positionX, Integer positionY) {
-		super(map, positionX, positionY);
+	public Fox(Integer positionX, Integer positionY) {
+		super(positionX, positionY);
 		this.walkThroughEdge = true;
-		this.setColor(new float[] {1,0,0});
+		this.color = new Color(1f, 0f, 0f);
 		this.hunger = HUNGER_AT_BIRTH;
 		this.fertilityAge = 10D;
-		
 	}
 	
 	public Fox(Fox mother, Fox father) {
-		super(main.getMap(), mother.getPositionX(), mother.getPositionY());
+		super(mother.getPositionX(), mother.getPositionY());
 	}
 	
 	/**
@@ -38,55 +36,55 @@ public class Fox extends Animal {
 	
 	public void eat(Animal animalToEat) {
 		if (animalToEat instanceof Fox)
-			hunger = hunger - (Fox.HUNGER_LIMIT_DEATH - ((Fox)animalToEat).getHunger());
+		{
+			System.out.println("ERROR: eat(animalToEat): trying to eat fox");
+		}
+//			hunger = hunger - (Fox.HUNGER_LIMIT_DEATH - ((Fox)animalToEat).getHunger());
 		if (animalToEat instanceof Rabbit)
 			hunger = hunger - ((Rabbit)animalToEat).energy;
 		if (hunger < 0) hunger = 0D;
 		animalToEat.die();
 	}
 	
-	@Override
-	public boolean isFertile() { 
-		if (age > fertilityAge && sinceLastBaby > fertilityAge 
-				&& hunger < HUNGER_LIMIT_FERTILE) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
 	public boolean move() {
-		
-		Direction dirToRabbit = sniffForRabbit();
-		if (dirToRabbit != Direction.NONE && hunger > HUNGER_LIMIT_SEARCH_FOR_FOOD) {
-			return moveOneStep(dirToRabbit);
-		}
 		
 		Direction dirToFox = sniffForFox();
 		if (dirToFox != Direction.NONE && isFertile()) {
 			return moveOneStep(dirToFox);
 		}
 		
+		Direction dirToRabbit = sniffForRabbit();
+		if (dirToRabbit != Direction.NONE) {
+			return moveOneStep(dirToRabbit);
+		}
+		
 		return moveOneStepInCompletelyRandomDirection();
 	}
 	
-	public void setHunger(Double hunger) {
-		this.hunger = hunger;
-	}
 
-	public Double getHunger() {
-		return hunger;
+
+	@Override
+	protected double getHungerLimitDeath() {
+		return HUNGER_LIMIT_DEATH;
 	}
 
 	@Override
-	public void age() {
-		super.age();
-		
-		hunger ++;
-		if (hunger > HUNGER_LIMIT_DEATH) {
-			this.die();
-		}
+	protected double getHungerLimitSearchForFood() {
+		return HUNGER_LIMIT_SEARCH_FOR_FOOD;
 	}
-	
+
+	@Override
+	protected double getHungerLimitFertile() {
+		return HUNGER_LIMIT_FERTILE;
+	}
+
+	@Override
+	protected double getHungerConsumedWhenMating() {
+		return HUNGER_CONSUMED_WHEN_MATING;
+	}
+
+	@Override
+	protected double getHungerAtBirth() {
+		return HUNGER_AT_BIRTH;
+	}
 }

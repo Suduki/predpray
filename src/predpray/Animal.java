@@ -4,12 +4,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
+
+import static predpray.Constants.*;
 
 
 public abstract class Animal {
 
-	private static Random random = new Random();
 	protected boolean walkThroughEdge;
 	
 	public enum Direction {
@@ -24,37 +24,40 @@ public abstract class Animal {
 	protected Double fertilityAge;
 	protected Integer age;
 	protected Integer sinceLastBaby;
+	protected double hunger;
+	protected Color color;
 	
-	protected abstract boolean isFertile();
-	
-	Map map;
-	
+	protected abstract double getHungerLimitSearchForFood();
+	protected abstract double getHungerLimitDeath();
+	protected abstract double getHungerLimitFertile();
+	protected abstract double getHungerConsumedWhenMating();
+	protected abstract double getHungerAtBirth();
+
 	public int positionX;
 	public int positionY;
 	
-	private float[] color;
 	public int id;
 
 	
-	public float[] getColor() {
+	public Color getColor() {
 		return color;
 	}
 
-	public void setColor(float[] color) {
-		this.color = color;
+	public void setColor(Color color) {
+		this.color.reset();
+		this.color.append(color);
 	}
 
-	public Animal(Map map, Integer positionX, Integer positionY) {
+	public Animal(Integer positionX, Integer positionY) {
 		this.positionX = positionX;
 		this.positionY = positionY;
-		this.map = map;
 		this.age = new Integer(0);
 		this.sinceLastBaby = new Integer(0);
 		this.fertility = new Double(1);
 	}
 	
 	public boolean moveOneStepInCompletelyRandomDirection() {
-		Integer randomDirection = random.nextInt(5);
+		Integer randomDirection = RANDOM.nextInt(5);
 		Direction dir = Direction.values()[randomDirection];
 		return this.moveOneStep(dir);
 	}
@@ -64,7 +67,7 @@ public abstract class Animal {
 	public boolean moveOneStep(Direction direction) {
 		switch (direction) {
 			case EAST:
-				if (!map.hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX + 1, positionY, walkThroughEdge))) {
+				if (!main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX + 1, positionY, walkThroughEdge))) {
 					return false;
 				} 
 				else {
@@ -73,7 +76,7 @@ public abstract class Animal {
 				}
 				break;
 			case WEST:
-				if (!map.hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX - 1, positionY, walkThroughEdge))) {
+				if (!main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX - 1, positionY, walkThroughEdge))) {
 					return false;
 				} 
 				else {
@@ -83,7 +86,7 @@ public abstract class Animal {
 				
 				break;
 			case NORTH:
-				if (!map.hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY + 1, walkThroughEdge))) {
+				if (!main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY + 1, walkThroughEdge))) {
 					return false;
 				} 
 				else {
@@ -93,7 +96,7 @@ public abstract class Animal {
 				
 				break;
 			case SOUTH:
-				if (!map.hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY - 1, walkThroughEdge))) {
+				if (!main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY - 1, walkThroughEdge))) {
 					return false;
 				} 
 				else {
@@ -137,23 +140,23 @@ public abstract class Animal {
 		order.add(new Integer(2));
 		order.add(new Integer(3));
 		
-		Collections.shuffle(order);
+		Collections.shuffle(order, RANDOM);
 		
 		direction[order.get(0)] = Direction.EAST;
-		scentRabbit[order.get(0)] = map.getScentRabbitAt(map.correctX(positionX + 1, walkThroughEdge), positionY);
-		scentFox[order.get(0)] = map.getScentFoxAt(map.correctX(positionX + 1, walkThroughEdge), positionY);
+		scentRabbit[order.get(0)] = main.getMap().getScentRabbitAt(main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
+		scentFox[order.get(0)] = main.getMap().getScentFoxAt(main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
 
 		direction[order.get(1)] = Direction.WEST;
-		scentRabbit[order.get(1)] = map.getScentRabbitAt(map.correctX(positionX - 1, walkThroughEdge), positionY);
-		scentFox[order.get(1)] = map.getScentFoxAt(map.correctX(positionX - 1, walkThroughEdge), positionY);
+		scentRabbit[order.get(1)] = main.getMap().getScentRabbitAt(main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
+		scentFox[order.get(1)] = main.getMap().getScentFoxAt(main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
 		
 		direction[order.get(2)] = Direction.NORTH;
-		scentRabbit[order.get(2)] = map.getScentRabbitAt(positionX, map.correctY(positionY + 1, walkThroughEdge));
-		scentFox[order.get(2)] = map.getScentFoxAt(positionX, map.correctY(positionY + 1, walkThroughEdge));
+		scentRabbit[order.get(2)] = main.getMap().getScentRabbitAt(positionX, main.getMap().correctY(positionY + 1, walkThroughEdge));
+		scentFox[order.get(2)] = main.getMap().getScentFoxAt(positionX, main.getMap().correctY(positionY + 1, walkThroughEdge));
 		
 		direction[order.get(3)] = Direction.SOUTH;
-		scentRabbit[order.get(3)] = map.getScentRabbitAt(positionX, map.correctY(positionY - 1, walkThroughEdge));
-		scentFox[order.get(3)] = map.getScentFoxAt(positionX, map.correctY(positionY - 1, walkThroughEdge));
+		scentRabbit[order.get(3)] = main.getMap().getScentRabbitAt(positionX, main.getMap().correctY(positionY - 1, walkThroughEdge));
+		scentFox[order.get(3)] = main.getMap().getScentFoxAt(positionX, main.getMap().correctY(positionY - 1, walkThroughEdge));
 		
 		int bestSmell = 0;
 		Direction bestDirection = Direction.NONE;
@@ -181,7 +184,7 @@ public abstract class Animal {
 		order.add(new Integer(2));
 		order.add(new Integer(3));
 		
-		Collections.shuffle(order);
+		Collections.shuffle(order, RANDOM);
 		
 		for (Integer i : order) {
 			switch (i.intValue()) {
@@ -220,32 +223,37 @@ public abstract class Animal {
 		order.add(new Integer(2));
 		order.add(new Integer(3));
 		
-		Collections.shuffle(order);
+		Collections.shuffle(order, RANDOM);
 		
 		direction[order.get(0)] = Direction.EAST;
-		scentRabbit[order.get(0)] = map.getScentRabbitAt(map.correctX(positionX + 1, walkThroughEdge), positionY);
-		scentFox[order.get(0)] = map.getScentFoxAt(map.correctX(positionX + 1, walkThroughEdge), positionY);
+		scentRabbit[order.get(0)] = main.getMap().getScentRabbitAt(main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
+		scentFox[order.get(0)] = main.getMap().getScentFoxAt(main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
 
 		direction[order.get(1)] = Direction.WEST;
-		scentRabbit[order.get(1)] = map.getScentRabbitAt(map.correctX(positionX - 1, walkThroughEdge), positionY);
-		scentFox[order.get(1)] = map.getScentFoxAt(map.correctX(positionX - 1, walkThroughEdge), positionY);
+		scentRabbit[order.get(1)] = main.getMap().getScentRabbitAt(main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
+		scentFox[order.get(1)] = main.getMap().getScentFoxAt(main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
 		
 		direction[order.get(2)] = Direction.NORTH;
-		scentRabbit[order.get(2)] = map.getScentRabbitAt(positionX, map.correctY(positionY + 1, walkThroughEdge));
-		scentFox[order.get(2)] = map.getScentFoxAt(positionX, map.correctY(positionY + 1, walkThroughEdge));
+		scentRabbit[order.get(2)] = main.getMap().getScentRabbitAt(positionX, main.getMap().correctY(positionY + 1, walkThroughEdge));
+		scentFox[order.get(2)] = main.getMap().getScentFoxAt(positionX, main.getMap().correctY(positionY + 1, walkThroughEdge));
 		
 		direction[order.get(3)] = Direction.SOUTH;
-		scentRabbit[order.get(3)] = map.getScentRabbitAt(positionX, map.correctY(positionY - 1, walkThroughEdge));
-		scentFox[order.get(3)] = map.getScentFoxAt(positionX, map.correctY(positionY - 1, walkThroughEdge));
+		scentRabbit[order.get(3)] = main.getMap().getScentRabbitAt(positionX, main.getMap().correctY(positionY - 1, walkThroughEdge));
+		scentFox[order.get(3)] = main.getMap().getScentFoxAt(positionX, main.getMap().correctY(positionY - 1, walkThroughEdge));
 		
 		int bestSmell = 0;
 		Direction bestDirection = Direction.NONE;
 		
 		for (int i = 0; i < 4; i++)
 		{
-			if (scentRabbit[i].animalId != id && scentFox[i].animalId != id && bestSmell < scentRabbit[i].strength && scentRabbit[i].strength > scentFox[i].strength)
+			if (scentRabbit[i].animalId != id && scentFox[i].animalId != id && bestSmell < scentRabbit[i].strength)
 			{
-				bestSmell = scentRabbit[i].strength;
+				if (scentRabbit[i].strength > scentFox[i].strength) {
+					bestSmell = scentRabbit[i].strength;
+				}
+				else {
+					bestSmell = 1;
+				}
 				bestDirection = direction[i];
 				break;
 			}
@@ -295,30 +303,27 @@ public abstract class Animal {
 		AnimalHandler.killAnimal(this);
 	}
 	
-//	protected boolean isFertile() {
-//		if (age > fertilityAge && sinceLastBaby > fertilityAge) {
-//			return true;
-//		}
-//		return false;
-//	}
+	protected boolean isFertile() {
+		if (age > fertilityAge && sinceLastBaby > fertilityAge 
+				&& hunger < getHungerLimitFertile()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
 	public void age() {
 		age ++;
 		sinceLastBaby ++;
-		if (isFertile()) {
-			color[2] = 0.5f;
-		}
-		else {
-			color[2] = 0;
+		hunger ++;
+		if (hunger > getHungerLimitDeath()) {
+			this.die();
 		}
 	}
 	
 	public <T extends Animal> void mateWith(T mother) {
 		Animal father = this;
-
-		// Let the child spawn at a random position
-		//		int positionForChildX = new Random().nextInt(Map.numberOfNodesX);
-		//		int positionForChildY = new Random().nextInt(Map.numberOfNodesY);
 
 		// Spawn at father's position (same as mother's)
 		int positionForChildX = father.positionX;
@@ -334,7 +339,7 @@ public abstract class Animal {
 				Animal child = constructor.newInstance(
 						main.getMap(), positionForChildX, positionForChildY);
 				if (!AnimalHandler.addNewAnimal(child)) {
-					father.die();
+//					father.die();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -348,6 +353,14 @@ public abstract class Animal {
 	}
 	public int getPositionY() {
 		return positionY;
+	}
+	
+	public void setHunger(Double hunger) {
+		this.hunger = hunger;
+	}
+
+	public Double getHunger() {
+		return hunger;
 	}
 
 

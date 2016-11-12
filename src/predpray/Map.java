@@ -6,13 +6,13 @@ public class Map {
 
 	public static final int numberOfNodesX = 48*MAP_MULTIPLIER; //TODO öka storlek, kolla svart ruta.
 	public static final int numberOfNodesY = 48*MAP_MULTIPLIER;
-	private Node[][] mapElements;
+	private Node[][] nodes;
 	
 	public Map() {
-		mapElements = new Node[numberOfNodesX][numberOfNodesY];
+		nodes = new Node[numberOfNodesX][numberOfNodesY];
 		for (int i = 0; i < numberOfNodesX; i++) {
 			for (int j = 0; j < numberOfNodesY; j++) {
-				mapElements[i][j] = new Node(i, j);
+				nodes[i][j] = new Node(i, j);
 			}
 		}
 	}
@@ -20,7 +20,7 @@ public class Map {
 	public void renderMap() {
 		for (int i = 0; i < numberOfNodesX; i++) {
 			for (int j = 0; j < numberOfNodesY; j++) {
-				mapElements[i][j].render();
+				nodes[i][j].render();
 			}
 		}
 	}
@@ -28,14 +28,14 @@ public class Map {
 	public void renderSmell() {
 		for (int i = 0; i < numberOfNodesX; i++) {
 			for (int j = 0; j < numberOfNodesY; j++) {
-				mapElements[i][j].renderSmell();
+				nodes[i][j].renderSmell();
 			}
 		}
 	}
 
 	public Node getNodeAt(int positionX, int positionY) {
 
-		return mapElements[positionX][positionY];
+		return nodes[positionX][positionY];
 	}
 
 	/**
@@ -77,28 +77,28 @@ public class Map {
 	}
 	
 	public void removeAnimalFromNode(Animal animal) {
-		mapElements[animal.getPositionX()][animal.getPositionY()].removeAnimalFromNode(animal);
+		nodes[animal.getPositionX()][animal.getPositionY()].removeAnimalFromNode(animal);
 	}
 
 	public boolean addAnimalToNode(Animal animal) {
-		return mapElements[animal.getPositionX()][animal.getPositionY()].addAnimalToNode(animal);
+		return nodes[animal.getPositionX()][animal.getPositionY()].addAnimalToNode(animal);
 	}
 
 	public Animal[] getAnimalsAtSameNodeAsOtherAnimal(Animal animal) {
-		return mapElements[animal.getPositionX()][animal.getPositionY()].getAnimalsInNode();
+		return nodes[animal.getPositionX()][animal.getPositionY()].getAnimalsInNode();
 	}
 
 	public Animal[] getAnimalsAtNode(int positionX, int positionY) {
-		return mapElements[positionX][positionY].getAnimalsInNode();
+		return nodes[positionX][positionY].getAnimalsInNode();
 	}
 	public Animal[] getAnimalsAtNode(Node n) {
 		return n.getAnimalsInNode();
 	}
 	public boolean nodeContainsRabbits(int positionX, int positionY) {
-		return mapElements[positionX][positionY].containsRabbits();
+		return nodes[positionX][positionY].containsRabbits();
 	}
 	public boolean nodeContainsFoxes(int positionX, int positionY) {
-		return mapElements[positionX][positionY].containsFoxes();
+		return nodes[positionX][positionY].containsFoxes();
 	}
 	public int correctX(int positionX, boolean walkThroughEdge) {
 		if (walkThroughEdge) {
@@ -137,7 +137,7 @@ public class Map {
 //	}
 
 	public boolean hasRoomForOneMoreAnimal(int[] coords) {
-		if (mapElements[coords[0]][coords[1]].hasRoomForMoreAnimals()) return true;
+		if (nodes[coords[0]][coords[1]].hasRoomForMoreAnimals()) return true;
 		return false;
 	}
 
@@ -146,17 +146,16 @@ public class Map {
 		{
 			for (int j = 0; j < numberOfNodesY; ++j) 
 			{
-				Node node = mapElements[i][j]; 
-				node.updateSmell();
+				nodes[i][j].update();
 			}
 		}
 	}
 
 	public Scent getScentFoxAt(int pX, int pY) {
-		return mapElements[pX][pY].getScentFox();
+		return nodes[pX][pY].getScentFox();
 	}
 	public Scent getScentRabbitAt(int pX, int pY) {
-		return mapElements[pX][pY].getScentRabbit();
+		return nodes[pX][pY].getScentRabbit();
 	}
 
 }

@@ -117,7 +117,7 @@ public class DisplayHelper {
 		float dy = Node.getDisplayHeight() / 10;
 		
 		
-		main.displayHelper.renderQuad(animal.getColor()[0], animal.getColor()[1], animal.getColor()[2], 
+		main.displayHelper.renderQuad(animal.getColor().red, animal.getColor().green, animal.getColor().blue, 
 				screenPositionX + dx, screenPositionY + dy, 
 				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + dy, 
 				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + Node.getDisplayHeight() - dy, 

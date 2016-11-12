@@ -1,16 +1,11 @@
 package predpray;
 
-import static predpray.Constants.INIT_NUMBER_OF_FOXES;
-import static predpray.Constants.INIT_NUMBER_OF_RABBITS;
-import static predpray.Constants.MIN_NUMBER_OF_FOXES;
-import static predpray.Constants.MIN_NUMBER_OF_RABBITS;
-import static predpray.Constants.SLEEP_TIME;
+import static predpray.Constants.*;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 
@@ -20,7 +15,6 @@ public class main {
 	
 	public static DisplayHelper displayHelper;
 	private static Map map;
-	private static Random random = new Random();
 
 	public static void main(String[] args) throws IOException {
 		
@@ -130,11 +124,11 @@ public class main {
 	
 
 	private static void createRandomFox() {
-		Fox fox = new Fox(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
+		Fox fox = new Fox(RANDOM.nextInt(Map.numberOfNodesX), RANDOM.nextInt(Map.numberOfNodesY));
 		AnimalHandler.addNewAnimal(fox);
 	}
 	private static void createRandomRabbit() {
-		Rabbit rabbit = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
+		Rabbit rabbit = new Rabbit(RANDOM.nextInt(Map.numberOfNodesX), RANDOM.nextInt(Map.numberOfNodesY));
 		AnimalHandler.addNewAnimal(rabbit);		
 	}
 

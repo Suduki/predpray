@@ -174,7 +174,10 @@ public class Node {
 		updateScent();
 	}
 	private void updateGrass() {
-		grass.grow();
+		if (!containsRabbits())
+		{
+			grass.grow();
+		}
 		color.paint(grass);
 	}
 	private void updateScent() {

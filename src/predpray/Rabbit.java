@@ -11,15 +11,15 @@ public class Rabbit extends Animal {
 	private static final double HUNGER_CONSUMED_WHEN_MATING = 1d;
 	private static double HUNGER_AT_BIRTH = HUNGER_LIMIT_DEATH - HUNGER_CONSUMED_WHEN_MATING;
 	
-	private static final double HARVEST_SKILL = 20d;
-	private static final double DIGESTION_EFFECTIVENESS = 0.1d;
+	private static final double HARVEST_SKILL = 2d;
+	private static final double DIGESTION_EFFECTIVENESS = 1.5d;
 	
 	public Rabbit(Integer positionX, Integer positionY) {
 		super(positionX, positionY);
 		this.walkThroughEdge = true;
 		this.color = new Color(0,0,1);
-		this.fertilityAge = 5D;
-		this.energy = 30D;
+		this.fertilityAge = 10D;
+		this.energy = 10D;
 	}
 	
 	private boolean isHungry()
@@ -54,6 +54,7 @@ public class Rabbit extends Animal {
 		else
 		{
 			// Hungry, not fertile, no enemy
+			
 			hunger -= Main.map.getNodeAt(positionX, positionY).harvest(HARVEST_SKILL) * DIGESTION_EFFECTIVENESS;
 			moved = moveOneStepInCompletelyRandomDirection();
 		}

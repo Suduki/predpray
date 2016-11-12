@@ -17,7 +17,7 @@ public class AnimalHandler {
 
 		// Add it to the first available spot in the list.
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
-			if (allAnimals[i] == null && main.getMap().addAnimalToNode(animal)) {
+			if (allAnimals[i] == null && Main.getMap().addAnimalToNode(animal)) {
 				animal.id = i;
 				allAnimals[i] = animal;
 				totalNumberOfLivingAnimals++;
@@ -46,7 +46,7 @@ public class AnimalHandler {
 					totalNumberOfLivingRabbits --;
 				if (animal instanceof Fox) 
 					totalNumberOfLivingFoxes --;
-				main.getMap().removeAnimalFromNode(animal);
+				Main.getMap().removeAnimalFromNode(animal);
 			}
 		}
 	}
@@ -78,10 +78,10 @@ public class AnimalHandler {
 		for (Integer i : order) {
 			Animal animal = allAnimals[i];
 			if (animal != null) {
-				main.getMap().removeAnimalFromNode(animal);
+				Main.getMap().removeAnimalFromNode(animal);
 				animal.moveOneStepInCompletelyRandomDirection();
-				interact(main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);
-				main.getMap().addAnimalToNode(animal);
+				interact(Main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);
+				Main.getMap().addAnimalToNode(animal);
 				animal.age();
 			}
 		}
@@ -97,15 +97,11 @@ public class AnimalHandler {
 		for (Integer i : order) {
 			Animal animal = allAnimals[i];
 			if (animal != null) {
-				main.getMap().removeAnimalFromNode(animal);
+				Main.getMap().removeAnimalFromNode(animal);
 				animal.move();
-				main.getMap().addAnimalToNode(animal);
-				interact(main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);					
+				Main.getMap().addAnimalToNode(animal);
+				interact(Main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);					
 				
-				if (animal instanceof Rabbit)
-				{
-					((Rabbit) animal).eatGrass();
-				}
 				animal.age();
 			}
 		}
@@ -113,14 +109,11 @@ public class AnimalHandler {
 	
 	public static void interact(Animal[] sleepingAnimals, Animal walker) {
 		
-		int numberOfAnimalsInCell = sleepingAnimals.length;
-		for (int i = 0; i < numberOfAnimalsInCell; i++) {
-			Animal sleeper = sleepingAnimals[i];
+		for (Animal sleeper : sleepingAnimals) {
 			if (sleeper == null || sleeper == walker || sleeper.age == 0) {
 				continue;
 			}
 
-			//TODO this should be a method in fox/rabbit
 			if (walker instanceof Fox && sleeper instanceof Rabbit) {
 				((Fox) walker).eat(sleeper);
 			}

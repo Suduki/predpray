@@ -66,7 +66,8 @@ public class DisplayHelper {
 				glClear(GL_COLOR_BUFFER_BIT);
 
 //				main.getMap().renderMap();
-				main.getMap().renderSmell();
+//				Main.getMap().renderSmell();
+				Main.getMap().renderGrass();
 				AnimalHandler.renderAllAnimals();
 				
 				Display.update();
@@ -117,7 +118,7 @@ public class DisplayHelper {
 		float dy = Node.getDisplayHeight() / 10;
 		
 		
-		main.displayHelper.renderQuad(animal.getColor().red, animal.getColor().green, animal.getColor().blue, 
+		Main.displayHelper.renderQuad(animal.getColor().red, animal.getColor().green, animal.getColor().blue, 
 				screenPositionX + dx, screenPositionY + dy, 
 				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + dy, 
 				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + Node.getDisplayHeight() - dy, 
@@ -125,6 +126,20 @@ public class DisplayHelper {
 		
 	}
 
+	
+	public void renderQuad(Color color, 
+			float corner1X, float corner1Y,
+			float corner2X, float corner2Y,
+			float corner3X, float corner3Y,
+			float corner4X, float corner4Y) {
+		renderQuad(color.red, color.green, color.blue, 
+				corner1X, corner1Y, 
+				corner2X, corner2Y, 
+				corner3X, corner3Y, 
+				corner4X, corner4Y);
+	}
+
+	
 	public void renderQuad
 		(float red, float green, float blue, 
 			float corner1X, float corner1Y,

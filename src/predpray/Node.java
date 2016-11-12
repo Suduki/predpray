@@ -1,8 +1,8 @@
 package predpray;
 
 import static predpray.Constants.MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE;
-import static predpray.Constants.SMELL_MAX_FOX;
-import static predpray.Constants.SMELL_MAX_RABBIT;
+import static predpray.Constants.SCENT_MAX_FOX;
+import static predpray.Constants.SCENT_MAX_RABBIT;
 
 import java.util.ArrayList;
 
@@ -14,8 +14,8 @@ public class Node {
 	private Scent scentRabbit;
 	private Scent scentFox;
 	private Grass grass;
-	public static float displayWidth = DisplayHelper.SCREEN_WIDTH / Map.numberOfNodesX;
-	public static float displayHeight = DisplayHelper.SCREEN_HEIGHT / Map.numberOfNodesY;
+	public static float displayWidth = new Float(DisplayHelper.SCREEN_WIDTH) / Map.numberOfNodesX;
+	public static float displayHeight = new Float(DisplayHelper.SCREEN_HEIGHT) / Map.numberOfNodesY;
 	private Animal[] animalsInNode;
 	private Color color;
 	
@@ -66,26 +66,24 @@ public class Node {
 	}
 
 	public void renderSmell() {
-		
-		
 		float red = 0f;
 		float green = 0f;
 		float blue = 0f;
 		if (scentFox.strength > 0f) 
 		{
-			red += new Float(scentFox.strength)/SMELL_MAX_FOX/2;
-			blue += new Float(scentFox.strength)/SMELL_MAX_FOX/2;
+			red += new Float(scentFox.strength)/SCENT_MAX_FOX/2;
+			blue += new Float(scentFox.strength)/SCENT_MAX_FOX/2;
 		}
 		if (scentRabbit.strength > 0f) 
 		{
-			green += new Float(scentRabbit.strength)/SMELL_MAX_RABBIT/2;
-			blue += new Float(scentRabbit.strength)/SMELL_MAX_RABBIT/2;
+			green += new Float(scentRabbit.strength)/SCENT_MAX_RABBIT/2;
+			blue += new Float(scentRabbit.strength)/SCENT_MAX_RABBIT/2;
 		}
 		
 		float screenPositionX = positionX * displayWidth;
 		float screenPositionY = positionY * displayHeight;
 		
-		main.displayHelper.renderQuad(red, green, blue, 
+		Main.displayHelper.renderQuad(red, green, blue, 
 				screenPositionX, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 
@@ -101,7 +99,19 @@ public class Node {
 		float screenPositionX = positionX * displayWidth;
 		float screenPositionY = positionY * displayHeight;
 		
-		main.displayHelper.renderQuad(red, green, blue, 
+		Main.displayHelper.renderQuad(red, green, blue, 
+				screenPositionX, screenPositionY, 
+				screenPositionX + displayWidth, screenPositionY, 
+				screenPositionX + displayWidth, screenPositionY + displayHeight, 
+				screenPositionX, screenPositionY + displayHeight); 
+	}
+	
+	public void renderGrass() {
+		
+		float screenPositionX = positionX * displayWidth;
+		float screenPositionY = positionY * displayHeight;
+		
+		Main.displayHelper.renderQuad(color, 
 				screenPositionX, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 
@@ -165,14 +175,14 @@ public class Node {
 	}
 	private void updateGrass() {
 		grass.grow();
-		color.append(grass);
+		color.paint(grass);
 	}
 	private void updateScent() {
 
 		
 		if (containsFoxes()) 
 		{
-			scentFox.refresh(SMELL_MAX_FOX, getAllAnimalsOfType(Fox.class).get(0).id);
+			scentFox.refresh(SCENT_MAX_FOX, getAllAnimalsOfType(Fox.class).get(0).id);
 		}
 		else if (scentFox.strength > 0)
 		{
@@ -182,7 +192,7 @@ public class Node {
 		
 		if (containsRabbits()) 
 		{
-			scentRabbit.refresh(SMELL_MAX_RABBIT, getAllAnimalsOfType(Rabbit.class).get(0).id);
+			scentRabbit.refresh(SCENT_MAX_RABBIT, getAllAnimalsOfType(Rabbit.class).get(0).id);
 		}
 		else if (scentRabbit.strength > 0)
 		{
@@ -197,6 +207,12 @@ public class Node {
 	public Scent getScentFox()
 	{
 		return scentFox;
+	}
+
+	public double harvest(double harvestSkill) {
+		double magnitude = grass.cut(harvestSkill);
+		color.paint(grass);
+		return magnitude;
 	}
 
 }

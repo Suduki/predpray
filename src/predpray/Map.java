@@ -25,6 +25,14 @@ public class Map {
 		}
 	}
 	
+	public void renderGrass() {
+		for (int i = 0; i < numberOfNodesX; i++) {
+			for (int j = 0; j < numberOfNodesY; j++) {
+				nodes[i][j].renderGrass();
+			}
+		}
+	}
+	
 	public void renderSmell() {
 		for (int i = 0; i < numberOfNodesX; i++) {
 			for (int j = 0; j < numberOfNodesY; j++) {

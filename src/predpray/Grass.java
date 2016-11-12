@@ -3,7 +3,7 @@ package predpray;
 import static predpray.Constants.*;
 
 public class Grass {
-	private int length;
+	private double length;
 	
 	public Grass(int length)
 	{
@@ -19,10 +19,10 @@ public class Grass {
 		}
 	}
 	
-	public int cut(int pCutLength)
+	public double cut(double harvestSkill)
 	{
-		int oldLength = length;
-		length -= pCutLength;
+		double oldLength = length;
+		length -= harvestSkill;
 		if (length < 0)
 		{
 			length = 0;
@@ -31,7 +31,7 @@ public class Grass {
 		return oldLength - length;
 	}
 
-	public int getLength() {
+	public double getLength() {
 		return length;
 	}
 }

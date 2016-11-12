@@ -10,12 +10,14 @@ public class Fox extends Animal {
 	private static final double HUNGER_AT_BIRTH = HUNGER_LIMIT_DEATH - HUNGER_CONSUMED_WHEN_MATING;
 	
 
+	public int killCount;
 	
 	public Fox(Integer positionX, Integer positionY) {
 		super(positionX, positionY);
 		this.walkThroughEdge = true;
 		this.color = new Color(1f, 0f, 0f);
 		this.hunger = HUNGER_AT_BIRTH;
+		this.killCount = 0;
 		this.fertilityAge = 10D;
 	}
 	
@@ -43,6 +45,7 @@ public class Fox extends Animal {
 		if (animalToEat instanceof Rabbit)
 			hunger = hunger - ((Rabbit)animalToEat).energy;
 		if (hunger < 0) hunger = 0D;
+		killCount ++;
 		animalToEat.die();
 	}
 	

@@ -18,9 +18,9 @@ public class Color {
 		this.red   += pC.red;
 		this.blue  += pC.blue;
 	}
-	public void append(Grass pGrass)
+	public void paint(Grass pGrass)
 	{
-		this.green += new Float(pGrass.getLength())/GRASS_MAX_LIMIT;
+		this.green = new Float(pGrass.getLength())/GRASS_MAX_LIMIT;
 	}
 	
 	public void reset()

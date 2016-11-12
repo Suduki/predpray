@@ -243,7 +243,7 @@ public abstract class Animal {
 		
 		for (int i = 0; i < 4; i++)
 		{
-			if (scentRabbit[i].animalId != id && scentFox[i].animalId != id && bestSmell < scentRabbit[i].strength)
+			if (scentRabbit[i].animalId != id && scentFox[i].animalId != id && bestSmell < scentRabbit[i].strength && scentRabbit[i].strength > scentFox[i].strength)
 			{
 				bestSmell = scentRabbit[i].strength;
 				bestDirection = direction[i];
@@ -314,10 +314,6 @@ public abstract class Animal {
 	}
 	
 	public <T extends Animal> void mateWith(T mother) {
-		float red = new Random().nextFloat();
-		float blue = new Random().nextFloat();
-		float green = new Random().nextFloat();
-
 		Animal father = this;
 
 		// Let the child spawn at a random position

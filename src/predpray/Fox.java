@@ -7,12 +7,8 @@ public class Fox extends Animal {
 	private static final double HUNGER_LIMIT_SEARCH_FOR_FOOD = 25d;
 	private static final double HUNGER_LIMIT_DEATH = 50d;
 	private static final double HUNGER_LIMIT_FERTILE = 10d;
-	public static double HUNGER_LIMIT_CANNIBALISM = HUNGER_LIMIT_DEATH;
-	
-	
-	private static final double HUNGER_CONSUMED_WHEN_MATING = 30d;
-	
-	private double hungerAtBirth = HUNGER_CONSUMED_WHEN_MATING;
+	private static final double HUNGER_CONSUMED_WHEN_MATING = 10d;
+	private static double HUNGER_AT_BIRTH= HUNGER_CONSUMED_WHEN_MATING;
 	
 
 	
@@ -20,7 +16,7 @@ public class Fox extends Animal {
 		super(map, positionX, positionY);
 		this.walkThroughEdge = true;
 		this.setColor(new float[] {1,0,0});
-		this.hunger = hungerAtBirth;
+		this.hunger = HUNGER_AT_BIRTH;
 		this.fertilityAge = 10D;
 		
 	}

@@ -1,15 +1,11 @@
 package predpray;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Random;
+import static predpray.Constants.TOTAL_NUMBER_OF_ALLOWED_ANIMALS;
 
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class AnimalHandler {
-	public final static int TOTAL_NUMBER_OF_ALLOWED_ANIMALS = 
-			Map.numberOfNodesX * Map.numberOfNodesY * Node.MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE/5; 
-			
 
 	private static int totalNumberOfLivingAnimals = 0;
 	private static int totalNumberOfLivingRabbits = 0;
@@ -34,6 +30,10 @@ public class AnimalHandler {
 			}
 		}
 
+		if (animal.getClass().isInstance(Fox.class))
+		{
+			System.out.println("hej");
+		}
 		return false;
 	}
 
@@ -127,12 +127,7 @@ public class AnimalHandler {
 				walker.mateWith(sleeper);
 			}
 			else if (walker instanceof Fox && sleeper instanceof Fox) {
-				if (((Fox)walker).getHunger() > Fox.HUNGER_LIMIT_CANNIBALISM) {
-					((Fox) walker).eat(sleeper);
-				}
-				else {
-					walker.mateWith(sleeper);
-				}
+				walker.mateWith(sleeper);
 			}
 		}
 	}

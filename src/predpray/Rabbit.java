@@ -10,7 +10,7 @@ public class Rabbit extends Animal {
 		super(map, positionX, positionY);
 		this.walkThroughEdge = true;
 		this.setColor(new float[] {0,1,0});
-		this.fertilityAge = 10D;
+		this.fertilityAge = 20D;
 		this.energy = 50D;
 	}
 

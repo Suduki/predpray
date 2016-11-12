@@ -1,15 +1,19 @@
 package predpray;
 
+import static predpray.Constants.MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE;
+import static predpray.Constants.SMELL_MAX_FOX;
+import static predpray.Constants.SMELL_MAX_RABBIT;
+
 import java.util.ArrayList;
 
+
 public class Node {
-	
-	public static final int MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE = 5;
 	
 	private int positionX;
 	private int positionY;
 	private Scent scentRabbit;
 	private Scent scentFox;
+	private int grass;
 	public static float displayWidth = DisplayHelper.SCREEN_WIDTH / Map.numberOfNodesX;
 	public static float displayHeight = DisplayHelper.SCREEN_HEIGHT / Map.numberOfNodesY;
 	private Animal[] animalsInNode;
@@ -67,13 +71,13 @@ public class Node {
 		float blue = 0f;
 		if (scentFox.strength > 0f) 
 		{
-			red += new Float(scentFox.strength)/main.SMELL_MAX_FOX/2;
-			blue += new Float(scentFox.strength)/main.SMELL_MAX_FOX/2;
+			red += new Float(scentFox.strength)/SMELL_MAX_FOX/2;
+			blue += new Float(scentFox.strength)/SMELL_MAX_FOX/2;
 		}
 		if (scentRabbit.strength > 0f) 
 		{
-			green += new Float(scentRabbit.strength)/main.SMELL_MAX_RABBIT/2;
-			blue += new Float(scentRabbit.strength)/main.SMELL_MAX_RABBIT/2;
+			green += new Float(scentRabbit.strength)/SMELL_MAX_RABBIT/2;
+			blue += new Float(scentRabbit.strength)/SMELL_MAX_RABBIT/2;
 		}
 		
 		float screenPositionX = positionX * displayWidth;
@@ -167,7 +171,7 @@ public class Node {
 		
 		if (containsFoxes()) 
 		{
-			scentFox.refresh(main.SMELL_MAX_FOX, getAllAnimalsOfType(Fox.class).get(0).id);
+			scentFox.refresh(SMELL_MAX_FOX, getAllAnimalsOfType(Fox.class).get(0).id);
 		}
 		else if (scentFox.strength > 0)
 		{
@@ -177,7 +181,7 @@ public class Node {
 		
 		if (containsRabbits()) 
 		{
-			scentRabbit.refresh(main.SMELL_MAX_RABBIT, getAllAnimalsOfType(Rabbit.class).get(0).id);
+			scentRabbit.refresh(SMELL_MAX_RABBIT, getAllAnimalsOfType(Rabbit.class).get(0).id);
 		}
 		else if (scentRabbit.strength > 0)
 		{

@@ -1,11 +1,11 @@
 package predpray;
 
-
+import static predpray.Constants.*;
 
 public class Map {
 
-	public static final int numberOfNodesX = 48*main.MAP_MULTIPLIER; //TODO öka storlek, kolla svart ruta.
-	public static final int numberOfNodesY = 48*main.MAP_MULTIPLIER;
+	public static final int numberOfNodesX = 48*MAP_MULTIPLIER; //TODO öka storlek, kolla svart ruta.
+	public static final int numberOfNodesY = 48*MAP_MULTIPLIER;
 	private Node[][] mapElements;
 	
 	public Map() {

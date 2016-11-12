@@ -1,39 +1,22 @@
 package predpray;
 
+import static predpray.Constants.INIT_NUMBER_OF_FOXES;
+import static predpray.Constants.INIT_NUMBER_OF_RABBITS;
+import static predpray.Constants.MIN_NUMBER_OF_FOXES;
+import static predpray.Constants.MIN_NUMBER_OF_RABBITS;
+import static predpray.Constants.SLEEP_TIME;
+
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Random;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.Display;
-
-import static org.lwjgl.opengl.GL11.*;
-
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
-
 
 public class main {
 
-	public static final int MAP_MULTIPLIER = 3;
 	
-	//TODO: Move constants to common place
-	public static final int INIT_NUMBER_OF_RABBITS = 100 * MAP_MULTIPLIER;
-	public static final int INIT_NUMBER_OF_FOXES = 10 * MAP_MULTIPLIER;
-	private static final int MIN_NUMBER_OF_RABBITS = 5 * MAP_MULTIPLIER * MAP_MULTIPLIER;
-	private static final int MIN_NUMBER_OF_FOXES = 5 * MAP_MULTIPLIER * MAP_MULTIPLIER;
-	
-	private static int SLEEP_TIME = 10;
-	
-	public static final int SMELL_MAX_FOX = 20 ;
-	public static final int SMELL_MAX_RABBIT = 10 ;
 	
 	public static DisplayHelper displayHelper;
 	private static Map map;

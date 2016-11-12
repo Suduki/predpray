@@ -20,12 +20,20 @@ import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 
 
-public class Main {
+public class main {
 
-	public static final int INIT_NUMBER_OF_RABBITS = 2000;
-	public static final int INIT_NUMBER_OF_FOXES = 300;
-	private static final int MIN_NUMBER_OF_RABBITS = 1000;
-	private static final int MIN_NUMBER_OF_FOXES = 300;
+	public static final int MAP_MULTIPLIER = 3;
+	
+	//TODO: Move constants to common place
+	public static final int INIT_NUMBER_OF_RABBITS = 100 * MAP_MULTIPLIER;
+	public static final int INIT_NUMBER_OF_FOXES = 10 * MAP_MULTIPLIER;
+	private static final int MIN_NUMBER_OF_RABBITS = 5 * MAP_MULTIPLIER * MAP_MULTIPLIER;
+	private static final int MIN_NUMBER_OF_FOXES = 5 * MAP_MULTIPLIER * MAP_MULTIPLIER;
+	
+	private static int SLEEP_TIME = 10;
+	
+	public static final int SMELL_MAX_FOX = 20 ;
+	public static final int SMELL_MAX_RABBIT = 10 ;
 	
 	public static DisplayHelper displayHelper;
 	private static Map map;
@@ -68,10 +76,8 @@ public class Main {
 	            new FileOutputStream("filename.txt"), "utf-8"));
 		try {
 		while (displayHelper.renderThreadThread.isAlive()) {
-			/*
-			 * let each animal firstly move, then interact
-			 */
 			AnimalHandler.moveAllAnimalsOneStepAndInteract();
+			map.updateAllNodes();
 //			ArrayList<Node> nodesWithInteractingAnimals = map.findNodesContainingInteractingAnimals();
 //			
 //			for (Node nodeWithInteractingAnimals : nodesWithInteractingAnimals) {
@@ -86,7 +92,7 @@ public class Main {
 				writer.write(numberOfRabbits + " " + numberOfFoxes + "\n");
 				System.out.println("numberOfAnimals = " + numberOfAnimals + 
 						",    foxes = " + numberOfFoxes + ",   rabbits = " + numberOfRabbits);
-				while (numberOfFoxes < MIN_NUMBER_OF_FOXES || numberOfRabbits > 9000 * numberOfFoxes) {
+				while (numberOfFoxes < MIN_NUMBER_OF_FOXES || numberOfRabbits > 1000 * numberOfFoxes) {
 					System.out.print("Adding fox.");
 					createRandomFox();
 					numberOfFoxes++;
@@ -99,22 +105,27 @@ public class Main {
 				}
 			}
 			
-//			animal.moveOneStepInCompletelyRandomDirection();
-//			animal2.moveOneStepInCompletelyRandomDirection();
 			try {
-				Thread.sleep(20);
+				Thread.sleep(SLEEP_TIME);
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			if (Keyboard.isKeyDown(Keyboard.KEY_0)) { 
-				System.out.println("KEY 0 nedtryckt!");
-				displayHelper.exit();
-				System.exit(0);
+			if (Keyboard.isKeyDown(Keyboard.KEY_1)) { 
+				SLEEP_TIME = 10;
+			}
+			else if (Keyboard.isKeyDown(Keyboard.KEY_2)) { 
+				SLEEP_TIME = 100;
+			}
+			else if (Keyboard.isKeyDown(Keyboard.KEY_3)) { 
+				SLEEP_TIME = 200;
+			}
+			else if (Keyboard.isKeyDown(Keyboard.KEY_4)) { 
+				SLEEP_TIME = 500;
 			}
 			while (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 				try {
-					Thread.sleep(10);
+					Thread.sleep(50);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -140,8 +151,8 @@ public class Main {
 		AnimalHandler.addNewAnimal(fox);
 	}
 	private static void createRandomRabbit() {
-		Rabbit animal = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
-		AnimalHandler.addNewAnimal(animal);		
+		Rabbit rabbit = new Rabbit(map, new Random().nextInt(Map.numberOfNodesX), new Random().nextInt(Map.numberOfNodesY));
+		AnimalHandler.addNewAnimal(rabbit);		
 	}
 
 	public static Map getMap() {

@@ -65,7 +65,8 @@ public class DisplayHelper {
 			while(running) {
 				glClear(GL_COLOR_BUFFER_BIT);
 
-				Main.getMap().renderMap();
+//				main.getMap().renderMap();
+				main.getMap().renderSmell();
 				AnimalHandler.renderAllAnimals();
 				
 				Display.update();
@@ -116,7 +117,7 @@ public class DisplayHelper {
 		float dy = Node.getDisplayHeight() / 10;
 		
 		
-		Main.displayHelper.renderQuad(animal.getColor()[0], animal.getColor()[1], animal.getColor()[2], 
+		main.displayHelper.renderQuad(animal.getColor()[0], animal.getColor()[1], animal.getColor()[2], 
 				screenPositionX + dx, screenPositionY + dy, 
 				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + dy, 
 				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + Node.getDisplayHeight() - dy, 

@@ -4,8 +4,8 @@ package predpray;
 
 public class Map {
 
-	public static final int numberOfNodesX = 128; //TODO öka storlek, kolla svart ruta.
-	public static final int numberOfNodesY = 128;
+	public static final int numberOfNodesX = 48*main.MAP_MULTIPLIER; //TODO öka storlek, kolla svart ruta.
+	public static final int numberOfNodesY = 48*main.MAP_MULTIPLIER;
 	private Node[][] mapElements;
 	
 	public Map() {
@@ -21,6 +21,14 @@ public class Map {
 		for (int i = 0; i < numberOfNodesX; i++) {
 			for (int j = 0; j < numberOfNodesY; j++) {
 				mapElements[i][j].render();
+			}
+		}
+	}
+	
+	public void renderSmell() {
+		for (int i = 0; i < numberOfNodesX; i++) {
+			for (int j = 0; j < numberOfNodesY; j++) {
+				mapElements[i][j].renderSmell();
 			}
 		}
 	}
@@ -131,6 +139,24 @@ public class Map {
 	public boolean hasRoomForOneMoreAnimal(int[] coords) {
 		if (mapElements[coords[0]][coords[1]].hasRoomForMoreAnimals()) return true;
 		return false;
+	}
+
+	public void updateAllNodes() {
+		for (int i = 0; i < numberOfNodesX; ++i) 
+		{
+			for (int j = 0; j < numberOfNodesY; ++j) 
+			{
+				Node node = mapElements[i][j]; 
+				node.updateSmell();
+			}
+		}
+	}
+
+	public Scent getScentFoxAt(int pX, int pY) {
+		return mapElements[pX][pY].getScentFox();
+	}
+	public Scent getScentRabbitAt(int pX, int pY) {
+		return mapElements[pX][pY].getScentRabbit();
 	}
 
 }

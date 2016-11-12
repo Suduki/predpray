@@ -33,6 +33,7 @@ public abstract class Animal {
 	public int positionY;
 	
 	private float[] color;
+	public int id;
 
 	
 	public float[] getColor() {
@@ -126,6 +127,51 @@ public abstract class Animal {
 		}
 	}
 	public Direction sniffForFox() {
+		ArrayList<Integer> order = new ArrayList<Integer>();
+		Scent[] scentRabbit = new Scent[4];
+		Scent[] scentFox = new Scent[4];
+		Direction[] direction = new Direction[4]; 
+
+		order.add(new Integer(0));
+		order.add(new Integer(1));
+		order.add(new Integer(2));
+		order.add(new Integer(3));
+		
+		Collections.shuffle(order);
+		
+		direction[order.get(0)] = Direction.EAST;
+		scentRabbit[order.get(0)] = map.getScentRabbitAt(map.correctX(positionX + 1, walkThroughEdge), positionY);
+		scentFox[order.get(0)] = map.getScentFoxAt(map.correctX(positionX + 1, walkThroughEdge), positionY);
+
+		direction[order.get(1)] = Direction.WEST;
+		scentRabbit[order.get(1)] = map.getScentRabbitAt(map.correctX(positionX - 1, walkThroughEdge), positionY);
+		scentFox[order.get(1)] = map.getScentFoxAt(map.correctX(positionX - 1, walkThroughEdge), positionY);
+		
+		direction[order.get(2)] = Direction.NORTH;
+		scentRabbit[order.get(2)] = map.getScentRabbitAt(positionX, map.correctY(positionY + 1, walkThroughEdge));
+		scentFox[order.get(2)] = map.getScentFoxAt(positionX, map.correctY(positionY + 1, walkThroughEdge));
+		
+		direction[order.get(3)] = Direction.SOUTH;
+		scentRabbit[order.get(3)] = map.getScentRabbitAt(positionX, map.correctY(positionY - 1, walkThroughEdge));
+		scentFox[order.get(3)] = map.getScentFoxAt(positionX, map.correctY(positionY - 1, walkThroughEdge));
+		
+		int bestSmell = 0;
+		Direction bestDirection = Direction.NONE;
+		
+		for (int i = 0; i < 4; i++)
+		{
+			if (scentFox[i].animalId != id && scentRabbit[i].animalId != id && bestSmell < scentFox[i].strength)
+			{
+				{
+					bestSmell = scentFox[i].strength;
+					bestDirection = direction[i];
+				}
+			}
+		}
+		
+		return bestDirection;
+	}
+	/*public Direction sniffForFox() {
 		
 		// The search order
 		ArrayList<Integer> order = new ArrayList<Integer>();
@@ -161,11 +207,14 @@ public abstract class Animal {
 		}
 		
 		return Direction.NONE;
-	}
+	}*/
 	public Direction sniffForRabbit() {
-		// The search order
-		ArrayList<Integer> order = new ArrayList<Integer>();
 		
+		ArrayList<Integer> order = new ArrayList<Integer>();
+		Scent[] scentRabbit = new Scent[4];
+		Scent[] scentFox = new Scent[4];
+		Direction[] direction = new Direction[4]; 
+
 		order.add(new Integer(0));
 		order.add(new Integer(1));
 		order.add(new Integer(2));
@@ -173,31 +222,75 @@ public abstract class Animal {
 		
 		Collections.shuffle(order);
 		
-		for (Integer i : order) {
-			switch (i.intValue()) {
-			case 0:
-				if (map.nodeContainsRabbits(map.correctX(positionX + 1, walkThroughEdge), positionY)) {
-					return Direction.EAST;
-				}
+		direction[order.get(0)] = Direction.EAST;
+		scentRabbit[order.get(0)] = map.getScentRabbitAt(map.correctX(positionX + 1, walkThroughEdge), positionY);
+		scentFox[order.get(0)] = map.getScentFoxAt(map.correctX(positionX + 1, walkThroughEdge), positionY);
+
+		direction[order.get(1)] = Direction.WEST;
+		scentRabbit[order.get(1)] = map.getScentRabbitAt(map.correctX(positionX - 1, walkThroughEdge), positionY);
+		scentFox[order.get(1)] = map.getScentFoxAt(map.correctX(positionX - 1, walkThroughEdge), positionY);
+		
+		direction[order.get(2)] = Direction.NORTH;
+		scentRabbit[order.get(2)] = map.getScentRabbitAt(positionX, map.correctY(positionY + 1, walkThroughEdge));
+		scentFox[order.get(2)] = map.getScentFoxAt(positionX, map.correctY(positionY + 1, walkThroughEdge));
+		
+		direction[order.get(3)] = Direction.SOUTH;
+		scentRabbit[order.get(3)] = map.getScentRabbitAt(positionX, map.correctY(positionY - 1, walkThroughEdge));
+		scentFox[order.get(3)] = map.getScentFoxAt(positionX, map.correctY(positionY - 1, walkThroughEdge));
+		
+		int bestSmell = 0;
+		Direction bestDirection = Direction.NONE;
+		
+		for (int i = 0; i < 4; i++)
+		{
+			if (scentRabbit[i].animalId != id && scentFox[i].animalId != id && bestSmell < scentRabbit[i].strength)
+			{
+				bestSmell = scentRabbit[i].strength;
+				bestDirection = direction[i];
 				break;
-			case 1:
-				if (map.nodeContainsRabbits(map.correctX(positionX - 1, walkThroughEdge), positionY)) {
-					return Direction.WEST;
-				}
-				break;
-			case 2:
-				if (map.nodeContainsRabbits(positionX, map.correctY(positionY + 1, walkThroughEdge))) {
-					return Direction.NORTH;
-				}
-			case 3:
-				if (map.nodeContainsRabbits(positionX, map.correctY(positionY - 1, walkThroughEdge))) {
-					return Direction.SOUTH;
-				}
 			}
 		}
 		
-		return Direction.NONE;
+		return bestDirection;
 	}
+	
+//	public Direction sniffForRabbit() {
+//		// The search order
+//		ArrayList<Integer> order = new ArrayList<Integer>();
+//		
+//		order.add(new Integer(0));
+//		order.add(new Integer(1));
+//		order.add(new Integer(2));
+//		order.add(new Integer(3));
+//		
+//		Collections.shuffle(order);
+//		
+//		for (Integer i : order) {
+//			switch (i.intValue()) {
+//			case 0:
+//				if (map.nodeContainsRabbits(map.correctX(positionX + 1, walkThroughEdge), positionY)) {
+//					return Direction.EAST;
+//				}
+//				break;
+//			case 1:
+//				if (map.nodeContainsRabbits(map.correctX(positionX - 1, walkThroughEdge), positionY)) {
+//					return Direction.WEST;
+//				}
+//				break;
+//			case 2:
+//				if (map.nodeContainsRabbits(positionX, map.correctY(positionY + 1, walkThroughEdge))) {
+//					return Direction.NORTH;
+//				}
+//			case 3:
+//				if (map.nodeContainsRabbits(positionX, map.correctY(positionY - 1, walkThroughEdge))) {
+//					return Direction.SOUTH;
+//				}
+//			}
+//		}
+//		
+//		return Direction.NONE;
+//	}
+
 	public void die() {
 		AnimalHandler.killAnimal(this);
 	}
@@ -243,7 +336,7 @@ public abstract class Animal {
 						getConstructor(Map.class, Integer.class, Integer.class);
 
 				Animal child = constructor.newInstance(
-						Main.getMap(), positionForChildX, positionForChildY);
+						main.getMap(), positionForChildX, positionForChildY);
 				if (!AnimalHandler.addNewAnimal(child)) {
 					father.die();
 				}

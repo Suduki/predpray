@@ -4,14 +4,16 @@ package predpray;
 public class Fox extends Animal {
 
 	private double hunger;
+	private static final double HUNGER_LIMIT_SEARCH_FOR_FOOD = 25d;
+	private static final double HUNGER_LIMIT_DEATH = 50d;
+	private static final double HUNGER_LIMIT_FERTILE = 10d;
+	public static double HUNGER_LIMIT_CANNIBALISM = HUNGER_LIMIT_DEATH;
 	
-	private static double starvationLimitForDeath = 20d;
-	public static double HUNGER_AT_CANNIBALISM = starvationLimitForDeath-3d;
-	private double hungerConsumedWhenMating = 10d;
 	
-	private double hungerAtBirth = hungerConsumedWhenMating;
+	private static final double HUNGER_CONSUMED_WHEN_MATING = 30d;
 	
-	private double dontMateDueToHunger = 0.5d; 
+	private double hungerAtBirth = HUNGER_CONSUMED_WHEN_MATING;
+	
 
 	
 	public Fox(Map map, Integer positionX, Integer positionY) {
@@ -19,12 +21,12 @@ public class Fox extends Animal {
 		this.walkThroughEdge = true;
 		this.setColor(new float[] {1,0,0});
 		this.hunger = hungerAtBirth;
-		this.fertilityAge = 2D;
+		this.fertilityAge = 10D;
 		
 	}
 	
 	public Fox(Fox mother, Fox father) {
-		super(Main.getMap(), mother.getPositionX(), mother.getPositionY());
+		super(main.getMap(), mother.getPositionX(), mother.getPositionY());
 	}
 	
 	/**
@@ -40,19 +42,17 @@ public class Fox extends Animal {
 	
 	public void eat(Animal animalToEat) {
 		if (animalToEat instanceof Fox)
-			hunger = hunger - (((Fox)animalToEat).starvationLimitForDeath - ((Fox)animalToEat).getHunger());
+			hunger = hunger - (Fox.HUNGER_LIMIT_DEATH - ((Fox)animalToEat).getHunger());
 		if (animalToEat instanceof Rabbit)
 			hunger = hunger - ((Rabbit)animalToEat).energy;
 		if (hunger < 0) hunger = 0D;
-//		hunger = 0d;
-		
 		animalToEat.die();
 	}
 	
 	@Override
 	public boolean isFertile() { 
 		if (age > fertilityAge && sinceLastBaby > fertilityAge 
-				&& hunger < starvationLimitForDeath * dontMateDueToHunger - 1) {
+				&& hunger < HUNGER_LIMIT_FERTILE) {
 			return true;
 		}
 		else {
@@ -60,47 +60,20 @@ public class Fox extends Animal {
 		}
 	}
 	
-//	@Override
-//	public <T extends Animal> void mateWith(T mother) {
-////		if (hunger < starvationLimitForDeath * dontMateDueToHunger.intValue()) {
-//			super.mateWith(mother);
-//			this.hunger = this.hunger + hungerConsumedWhenMating;
-//			((Fox) mother).setHunger(((Fox) mother).getHunger() + ((Fox) mother).hungerConsumedWhenMating);
-////		}
-//	}
 	public boolean move() {
 		
-		Direction dirToFox = sniffForFox();
+		Direction dirToRabbit = sniffForRabbit();
+		if (dirToRabbit != Direction.NONE && hunger > HUNGER_LIMIT_SEARCH_FOR_FOOD) {
+			return moveOneStep(dirToRabbit);
+		}
 		
+		Direction dirToFox = sniffForFox();
 		if (dirToFox != Direction.NONE && isFertile()) {
 			return moveOneStep(dirToFox);
 		}
 		
-		Direction dirToRabbit = sniffForRabbit();
-		if (dirToRabbit == Direction.NONE) {
-			return moveOneStepInCompletelyRandomDirection();
-		}
-		
-		return moveOneStep(dirToRabbit);
+		return moveOneStepInCompletelyRandomDirection();
 	}
-	private Direction sniffForRabbitFromPosition(int x, int y) {
-		if(map.nodeContainsRabbits(map.correctX(x + 1, walkThroughEdge), y)) {
-			return Direction.EAST;
-		}
-		if(map.nodeContainsRabbits(map.correctX(x - 1, walkThroughEdge), y)) {
-			return Direction.WEST;
-		}
-		if(map.nodeContainsRabbits(x, map.correctY(y + 1, walkThroughEdge))) {
-			return Direction.NORTH;
-		}
-		if(map.nodeContainsRabbits(x, map.correctY(y - 1, walkThroughEdge))) {
-			return Direction.SOUTH;
-		}
-		return Direction.NONE;
-	
-	}
-	
-
 	
 	public void setHunger(Double hunger) {
 		this.hunger = hunger;
@@ -115,7 +88,7 @@ public class Fox extends Animal {
 		super.age();
 		
 		hunger ++;
-		if (hunger > starvationLimitForDeath) {
+		if (hunger > HUNGER_LIMIT_DEATH) {
 			this.die();
 		}
 	}

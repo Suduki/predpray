@@ -11,7 +11,7 @@ public class Rabbit extends Animal {
 		this.walkThroughEdge = true;
 		this.setColor(new float[] {0,1,0});
 		this.fertilityAge = 10D;
-		this.energy = 20D;
+		this.energy = 50D;
 	}
 
 	@Override

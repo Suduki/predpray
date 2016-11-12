@@ -1,6 +1,8 @@
 package predpray;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
 
@@ -15,13 +17,12 @@ public class AnimalHandler {
 
 	private static Animal[] allAnimals = new Animal[TOTAL_NUMBER_OF_ALLOWED_ANIMALS];
 
-	private static boolean startToKill;
-
 	public static boolean addNewAnimal(Animal animal) {
 
 		// Add it to the first available spot in the list.
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
-			if (allAnimals[i] == null && Main.getMap().addAnimalToNode(animal)) {
+			if (allAnimals[i] == null && main.getMap().addAnimalToNode(animal)) {
+				animal.id = i;
 				allAnimals[i] = animal;
 				totalNumberOfLivingAnimals++;
 				if (animal instanceof Rabbit) 
@@ -45,7 +46,7 @@ public class AnimalHandler {
 					totalNumberOfLivingRabbits --;
 				if (animal instanceof Fox) 
 					totalNumberOfLivingFoxes --;
-				Main.getMap().removeAnimalFromNode(animal);
+				main.getMap().removeAnimalFromNode(animal);
 			}
 		}
 	}
@@ -68,26 +69,38 @@ public class AnimalHandler {
 	}
 
 	public static void moveAllAnimalsOneStepRandomDirectionAndInteract() {
+		ArrayList<Integer> order = new ArrayList<Integer>();
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+			order.add(i);
+		}
+		Collections.shuffle(order);
+		
+		for (Integer i : order) {
 			Animal animal = allAnimals[i];
 			if (animal != null) {
-				Main.getMap().removeAnimalFromNode(animal);
+				main.getMap().removeAnimalFromNode(animal);
 				animal.moveOneStepInCompletelyRandomDirection();
-				interact(Main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);
-				Main.getMap().addAnimalToNode(animal);
+				interact(main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);
+				main.getMap().addAnimalToNode(animal);
 				animal.age();
 			}
 		}
 	}
 
 	public static void moveAllAnimalsOneStepAndInteract() {
+		ArrayList<Integer> order = new ArrayList<Integer>();
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+			order.add(i);
+		}
+		Collections.shuffle(order);
+		
+		for (Integer i : order) {
 			Animal animal = allAnimals[i];
 			if (animal != null) {
-				Main.getMap().removeAnimalFromNode(animal);
+				main.getMap().removeAnimalFromNode(animal);
 				animal.move();
-				Main.getMap().addAnimalToNode(animal);
-				interact(Main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);					
+				main.getMap().addAnimalToNode(animal);
+				interact(main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);					
 				
 				animal.age();
 			}
@@ -103,10 +116,6 @@ public class AnimalHandler {
 				continue;
 			}
 
-			//			if (TOTAL_NUMBER_OF_ALLOWED_ANIMALS > 10) {
-			//				startToKill = true;
-			//			}
-			//			if (startToKill) {
 			//TODO this should be a method in fox/rabbit
 			if (walker instanceof Fox && sleeper instanceof Rabbit) {
 				((Fox) walker).eat(sleeper);
@@ -118,50 +127,23 @@ public class AnimalHandler {
 				walker.mateWith(sleeper);
 			}
 			else if (walker instanceof Fox && sleeper instanceof Fox) {
-				if (((Fox)walker).getHunger() > Fox.HUNGER_AT_CANNIBALISM) {
+				if (((Fox)walker).getHunger() > Fox.HUNGER_LIMIT_CANNIBALISM) {
 					((Fox) walker).eat(sleeper);
 				}
 				else {
 					walker.mateWith(sleeper);
 				}
 			}
-//			if (mate) {
-//				try {
-//					Animal.mate(sleeper, walker);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			} else {
-//				sleeper.die();
-//				continue;
-//			}
-			
-			//			}
-			//			else if (mate) {
-			//			}
 		}
-
-		// Remove 
-		//		interactingAnimals.clear();
-		//		interactingAnimals.add(winner);
 	}
 
 	public static int getNumberOfAnimals() {
 		return totalNumberOfLivingAnimals;
 	}
 	public static int getNumberOfRabbits() {
-//		int number =0;
-//		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
-//			if (allAnimals[i] != null && allAnimals[i].getClass() == Rabbit.class) number++;
-//		}
 		return totalNumberOfLivingRabbits;
 	}
 	public static int getNumberOfFoxes() {
-//		int number =0;
-//		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
-//			if (allAnimals[i] != null && allAnimals[i].getClass() == Fox.class) number++;
-//		}
-//		return number;
 		return totalNumberOfLivingFoxes;
 	}
 	public static int getMean() {

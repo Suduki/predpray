@@ -3,35 +3,35 @@ package predpray;
 import static predpray.Constants.*;
 
 public class Grass {
-	private double length;
+	private double height;
 	
 	public Grass(int length)
 	{
-		this.length = length;
+		this.height = length;
 	}
 	
 	public void grow()
 	{
-		length += GRASS_GROWTH;
-		if (length > GRASS_MAX_LIMIT)
+		height += GRASS_GROWTH;
+		if (height > GRASS_MAX_LIMIT)
 		{
-			length = GRASS_MAX_LIMIT;
+			height = GRASS_MAX_LIMIT;
 		}
 	}
 	
 	public double cut(double harvestSkill)
 	{
-		double oldLength = length;
-		length -= harvestSkill;
-		if (length < 0)
+		double oldHeight = height;
+		height -= harvestSkill;
+		if (height < 0)
 		{
-			length = 0;
+			height = 0;
 		}
 		
-		return oldLength - length;
+		return oldHeight - height;
 	}
 
-	public double getLength() {
-		return length;
+	public double getHeight() {
+		return height;
 	}
 }

@@ -166,4 +166,8 @@ public class Map {
 		return nodes[pX][pY].getScentRabbit();
 	}
 
+	public double getGrassHeightAt(int pX, int pY) {
+		return nodes[pX][pY].getGrass().getHeight();
+	}
+
 }

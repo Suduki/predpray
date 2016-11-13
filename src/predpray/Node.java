@@ -218,4 +218,8 @@ public class Node {
 		return magnitude;
 	}
 
+	public Grass getGrass() {
+		return grass;
+	}
+
 }

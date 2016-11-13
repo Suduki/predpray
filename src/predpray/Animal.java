@@ -261,12 +261,14 @@ public abstract class Animal {
 					bestSmell = 1;
 				}
 				bestDirection = direction[i];
-				break;
+//				break; //TODO: investigate
 			}
 		}
 		
 		return bestDirection;
 	}
+	
+
 	
 //	public Direction sniffForRabbit() {
 //		// The search order

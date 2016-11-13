@@ -1,5 +1,12 @@
 package predpray;
 
+import static predpray.Constants.RANDOM;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import predpray.Animal.Direction;
+
 
 
 public class Rabbit extends Animal {
@@ -17,7 +24,7 @@ public class Rabbit extends Animal {
 	public Rabbit(Integer positionX, Integer positionY) {
 		super(positionX, positionY);
 		this.walkThroughEdge = true;
-		this.color = new Color(0,0,1);
+		this.color = new Color(0.7f,0.7f,0.7f);
 		this.fertilityAge = 10D;
 		this.energy = 10D;
 	}
@@ -54,12 +61,61 @@ public class Rabbit extends Animal {
 		else
 		{
 			// Hungry, not fertile, no enemy
-			
+			Direction directionToGrass = searchForGrass();
+			moved = moveOneStep(directionToGrass);
 			hunger -= Main.map.getNodeAt(positionX, positionY).harvest(HARVEST_SKILL) * DIGESTION_EFFECTIVENESS;
-			moved = moveOneStepInCompletelyRandomDirection();
 		}
 		
 		return moved;
+	}
+
+	
+	public Direction searchForGrass() {
+		
+		ArrayList<Integer> order = new ArrayList<Integer>();
+		Direction[] direction = new Direction[5]; 
+		double[] grassHeights = new double[5];
+		
+		order.add(new Integer(0));
+		order.add(new Integer(1));
+		order.add(new Integer(2));
+		order.add(new Integer(3));
+		order.add(new Integer(4));
+		
+		Collections.shuffle(order, RANDOM);
+		
+		direction[order.get(0)] = Direction.EAST;
+		direction[order.get(1)] = Direction.WEST;
+		direction[order.get(2)] = Direction.NORTH;
+		direction[order.get(3)] = Direction.SOUTH;
+		direction[order.get(4)] = Direction.NONE;
+		
+		
+		direction[order.get(0)] = Direction.EAST;
+		grassHeights[order.get(0)] = Main.getMap().getGrassHeightAt(Main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
+
+		direction[order.get(1)] = Direction.WEST;
+		grassHeights[order.get(1)] = Main.getMap().getGrassHeightAt(Main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
+		
+		direction[order.get(2)] = Direction.NORTH;
+		grassHeights[order.get(2)] = Main.getMap().getGrassHeightAt(positionX, Main.getMap().correctY(positionY + 1, walkThroughEdge));
+		
+		direction[order.get(3)] = Direction.SOUTH;
+		grassHeights[order.get(3)] = Main.getMap().getGrassHeightAt(positionX, Main.getMap().correctY(positionY - 1, walkThroughEdge));
+		
+
+		double bestHeight = 0;
+		Direction bestDirection = direction[0]; // Random direction
+		
+		for (int i = 0; i < 5; i++)
+		{
+			if (grassHeights[i] > bestHeight) {
+				bestHeight = grassHeights[i];
+				bestDirection = direction[i];
+			}
+		}
+		
+		return bestDirection;
 	}
 
 	@Override

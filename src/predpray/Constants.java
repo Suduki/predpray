@@ -4,18 +4,18 @@ import java.util.Random;
 
 public class Constants {
 	public static final int MAP_MULTIPLIER = 3;
-	public static final int INIT_NUMBER_OF_RABBITS = 50 * MAP_MULTIPLIER;
-	public static final int INIT_NUMBER_OF_FOXES = 10 * MAP_MULTIPLIER;
+	public static final int INIT_NUMBER_OF_RABBITS = 10000 * MAP_MULTIPLIER;
+	public static final int INIT_NUMBER_OF_FOXES = 50 * MAP_MULTIPLIER;
 	public static final int MIN_NUMBER_OF_RABBITS = 5 * MAP_MULTIPLIER * MAP_MULTIPLIER;
 	public static final int MIN_NUMBER_OF_FOXES = 2 * MAP_MULTIPLIER * MAP_MULTIPLIER;
-	public static final double MIN_FOXES_PER_RABBITS = 100000000000000d;
+	public static final double MIN_FOXES_PER_RABBITS = 1000d;
 	
 	public static int SLEEP_TIME = 10;
 	
 	public static final int SCENT_MAX_FOX = 50 ;
 	public static final int SCENT_MAX_RABBIT = 50 ;
 	
-	public static final int GRASS_MAX_LIMIT = 6;
+	public static final int GRASS_MAX_LIMIT = 5;
 	public static final int GRASS_GROWTH = 1;
 	
 	public static Random RANDOM = new Random(1);

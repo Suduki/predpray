@@ -1,6 +1,7 @@
 package predpray;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_LINE_LOOP;
 import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
 import static org.lwjgl.opengl.GL11.GL_PROJECTION;
@@ -12,6 +13,7 @@ import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
 import static org.lwjgl.opengl.GL11.glVertex2i;
+import static org.lwjgl.opengl.GL11.glVertex2f;
 
 import java.util.ArrayList;
 
@@ -118,12 +120,97 @@ public class DisplayHelper {
 		float dy = Node.getDisplayHeight() / 10;
 		
 		
-		Main.displayHelper.renderQuad(animal.getColor().red, animal.getColor().green, animal.getColor().blue, 
-				screenPositionX + dx, screenPositionY + dy, 
-				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + dy, 
-				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + Node.getDisplayHeight() - dy, 
-				screenPositionX + dx, screenPositionY + Node.getDisplayHeight() - dy); 
+//		Main.displayHelper.renderQuad(animal.getColor(), 
+//				screenPositionX + dx, screenPositionY + dy, 
+//				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + dy, 
+//				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + Node.getDisplayHeight() - dy, 
+//				screenPositionX + dx, screenPositionY + Node.getDisplayHeight() - dy);
+		int numCorners;
 		
+		if (animal instanceof Fox)
+		{
+			numCorners = 4;
+			float[] cornersX = {dx, Node.getDisplayWidth() - dx, Node.getDisplayWidth() - dx, dx};
+			float[] cornersY = {dy, dy, Node.getDisplayHeight() - dy, Node.getDisplayHeight() - dy};
+			for (int i = 0; i < numCorners; ++i)
+			{
+				cornersX[i] += screenPositionX;
+				cornersY[i] += screenPositionY;
+			}
+
+			cornersX[0] = (cornersX[0] + cornersX[1])/2;
+			cornersX[1] = cornersX[0]; 
+			renderQuad(animal.getColor(), cornersX, cornersY, numCorners);
+		}
+		else if (animal instanceof Rabbit)
+		{
+			numCorners = 4;
+			float[] cornersX = {dx,
+					(Node.getDisplayWidth() - dx), 
+					(Node.getDisplayWidth() - dx), 
+					dx
+					};
+			float[] cornersY = {dy, 
+					dy,
+					(Node.getDisplayHeight() - dy), 
+					(Node.getDisplayHeight() - dy)
+					};
+			for (int i = 0; i < numCorners; ++i)
+			{
+				cornersX[i] += screenPositionX;
+				cornersY[i] += screenPositionY;
+			}
+			
+			drawCircle(screenPositionX + Node.getDisplayWidth()*0.5f, screenPositionY + Node.getDisplayWidth()*0.5f, 
+					Node.getDisplayWidth()*0.5f, 0, 360f, 4, animal.color); //TODO
+		}
+	}
+	
+	
+	public static void drawCircle(float x, float y, float r, double startingAngleDeg, double endAngleDeg, int slices, Color color) {
+        int radius = (int) r;
+
+        double arcAngleLength = (endAngleDeg - startingAngleDeg) / 360f;
+
+        float[] vertexesX = new float[4];
+        float[] vertexesY = new float[4];
+
+        double initAngle = Math.PI / 180f * startingAngleDeg;
+        float prevXA = (float) Math.sin(initAngle) * radius;
+        float prevYA = (float) Math.cos(initAngle) * radius;
+
+        for(int arcIndex = 0; arcIndex < slices+1; arcIndex++) {
+            double angle = Math.PI * 2 * ((float)arcIndex) / ((float)slices);
+            angle += Math.PI / 180f;
+            angle *= arcAngleLength;
+            int index = 0;
+            float xa = (float) Math.sin(angle) * radius;
+            float ya = (float) Math.cos(angle) * radius;
+            vertexesX[index] = x;
+            vertexesY[index] = y;
+            vertexesX[index+1] = x+prevXA;
+            vertexesY[index+1] = y+prevYA;
+            vertexesX[index+2] = x+xa;
+            vertexesY[index+2] = y+ya;
+            vertexesX[index+3] = x;
+            vertexesY[index+3] = y;
+            
+            renderQuad(color, vertexesX, vertexesY, 4);
+            
+            prevXA = xa;
+            prevYA = ya;
+        }
+    }
+	
+	public static void renderQuad(Color color,
+			float[] cornersX,  float[] cornersY, int numEdges)
+	{
+		glBegin(GL_QUADS); {
+			GL11.glColor3f(color.red, color.green, color.blue);
+			for (int i = 0; i < numEdges; ++i) {
+				GL11.glVertex2f(cornersX[i], cornersY[i]);
+			}
+		} glEnd();
 	}
 
 	

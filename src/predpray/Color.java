@@ -20,9 +20,10 @@ public class Color {
 	}
 	public void paint(Grass pGrass)
 	{
-		this.green = new Float(pGrass.getLength())/GRASS_MAX_LIMIT*0.6f;
-		this.red = new Float(pGrass.getLength())/GRASS_MAX_LIMIT*0.2f;
-		this.blue = new Float(pGrass.getLength())/GRASS_MAX_LIMIT*0.2f;
+		this.green = new Float(pGrass.getHeight())/GRASS_MAX_LIMIT*0.4f;
+		this.green += 0.2f;
+		this.red = 0.2f;
+		this.blue = 0f;
 	}
 	
 	public void reset()

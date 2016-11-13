@@ -9,7 +9,9 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 public class Main {
 
@@ -18,7 +20,7 @@ public class Main {
 	public static DisplayHelper displayHelper;
 	public static Map map;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 
 		displayHelper = new DisplayHelper();
 		map = new Map();
@@ -47,15 +49,12 @@ public class Main {
 		// Rendertråden ansvarar för att lyssna på tangentbord och mus TODO fix
 		//		checkKeyboardForDisplayChanges();
 
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		Thread.sleep(100);
 		int iteration = 0;
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream("filename.txt"), "utf-8"));
 		try {
+			Mouse.create();
 			while (displayHelper.renderThreadThread.isAlive()) {
 				AnimalHandler.moveAllAnimalsOneStepAndInteract();
 				map.updateAllNodes();
@@ -105,16 +104,19 @@ public class Main {
 					SLEEP_TIME = 500;
 				}
 				while (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					Thread.sleep(50);
+   					if (Mouse.isButtonDown(0))
+					{
+//   						createFoxesInASquare();
+   						System.out.println(Mouse.getX() + ", y " + Mouse.getY());
+   						createFoxesInASquare(Mouse.getX()*Map.numberOfNodesX/DisplayHelper.SCREEN_WIDTH, 
+   								Mouse.getY()*Map.numberOfNodesX/DisplayHelper.SCREEN_HEIGHT, 5);
+   						Thread.sleep(1000);
 					}
 					if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
 						continue;
 					}
 				}
-
 			}
 		}
 		catch ( IllegalStateException e) {

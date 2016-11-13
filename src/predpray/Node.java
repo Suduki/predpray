@@ -1,8 +1,6 @@
 package predpray;
 
-import static predpray.Constants.MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE;
-import static predpray.Constants.SCENT_MAX_FOX;
-import static predpray.Constants.SCENT_MAX_RABBIT;
+import static predpray.Constants.*;
 
 import java.util.ArrayList;
 
@@ -24,7 +22,7 @@ public class Node {
 	public Node(int x, int y) {
 		positionX = x;
 		positionY = y;
-		grass = new Grass(0);
+		grass = new Grass(GRASS_MAX_LIMIT);
 		scentRabbit = new Scent(0, 0);
 		scentFox = new Scent(0, 0);
 		color = new Color(0f, 0f, 0f);

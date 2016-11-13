@@ -6,6 +6,8 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.lwjgl.input.Keyboard;
 
@@ -21,13 +23,16 @@ public class Main {
 		displayHelper = new DisplayHelper();
 		map = new Map();
 		
-		for (int i = 0; i < INIT_NUMBER_OF_RABBITS; i++) {
-			createRandomRabbit();
-		}
-		for (int i = 0; i < INIT_NUMBER_OF_FOXES; i++) {
-			createRandomFox();
-		}
-
+//		for (int i = 0; i < INIT_NUMBER_OF_RABBITS; i++) {
+//			createRandomRabbit();
+//		}
+//		for (int i = 0; i < INIT_NUMBER_OF_FOXES; i++) {
+//			createRandomFox();
+//		}
+		
+		createFoxesInASquare(0, 0, 10);
+		createRabbitsInASquare(0, 0, 70);
+		createFoxesInASquare(50, 50, 10);
 
 
 		//		while(!Display.isCloseRequested()) {
@@ -129,6 +134,30 @@ public class Main {
 	private static void createRandomRabbit() {
 		Rabbit rabbit = new Rabbit(RANDOM.nextInt(Map.numberOfNodesX), RANDOM.nextInt(Map.numberOfNodesY));
 		AnimalHandler.addNewAnimal(rabbit);		
+	}
+	
+	
+	private static void createFoxesInASquare(int x, int y, int width) 
+	{
+		for (int i = x; i < x + width; ++i)
+		{
+			for (int j = y; j < y + width; ++j)
+			{
+				Fox fox = new Fox(i, j);
+				AnimalHandler.addNewAnimal(fox);
+			}	
+		}
+	}
+	private static void createRabbitsInASquare(int x, int y, int width) 
+	{
+		for (int i = x; i < x + width; ++i)
+		{
+			for (int j = y; j < y + width; ++j)
+			{
+				Rabbit rabbit = new Rabbit(i, j);
+				AnimalHandler.addNewAnimal(rabbit);
+			}	
+		}
 	}
 
 	public static Map getMap() {

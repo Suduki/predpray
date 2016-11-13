@@ -24,7 +24,7 @@ public class Rabbit extends Animal {
 	public Rabbit(Integer positionX, Integer positionY) {
 		super(positionX, positionY);
 		this.walkThroughEdge = true;
-		this.color = new Color(0.7f,0.7f,0.7f);
+		this.color = new Color(0.8f,0.8f,0.8f);
 		this.fertilityAge = 10D;
 		this.energy = 10D;
 	}

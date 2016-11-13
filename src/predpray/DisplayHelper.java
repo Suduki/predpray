@@ -125,47 +125,45 @@ public class DisplayHelper {
 //				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + dy, 
 //				screenPositionX + Node.getDisplayWidth() - dx, screenPositionY + Node.getDisplayHeight() - dy, 
 //				screenPositionX + dx, screenPositionY + Node.getDisplayHeight() - dy);
-		int numCorners;
 		
 		if (animal instanceof Fox)
 		{
-			numCorners = 4;
-			float[] cornersX = {dx, Node.getDisplayWidth() - dx, Node.getDisplayWidth() - dx, dx};
-			float[] cornersY = {dy, dy, Node.getDisplayHeight() - dy, Node.getDisplayHeight() - dy};
-			for (int i = 0; i < numCorners; ++i)
-			{
-				cornersX[i] += screenPositionX;
-				cornersY[i] += screenPositionY;
-			}
-
-			cornersX[0] = (cornersX[0] + cornersX[1])/2;
-			cornersX[1] = cornersX[0]; 
-			renderQuad(animal.getColor(), cornersX, cornersY, numCorners);
+			renderFox((Fox)animal, screenPositionX, screenPositionY, dx, dy);
 		}
 		else if (animal instanceof Rabbit)
 		{
-			numCorners = 4;
-			float[] cornersX = {dx,
-					(Node.getDisplayWidth() - dx), 
-					(Node.getDisplayWidth() - dx), 
-					dx
-					};
-			float[] cornersY = {dy, 
-					dy,
-					(Node.getDisplayHeight() - dy), 
-					(Node.getDisplayHeight() - dy)
-					};
-			for (int i = 0; i < numCorners; ++i)
-			{
-				cornersX[i] += screenPositionX;
-				cornersY[i] += screenPositionY;
-			}
-			
-			drawCircle(screenPositionX + Node.getDisplayWidth()*0.5f, screenPositionY + Node.getDisplayWidth()*0.5f, 
-					Node.getDisplayWidth()*0.5f, 0, 360f, 4, animal.color); //TODO
+			renderRabbit((Rabbit)animal, screenPositionX, screenPositionY, dx, dy);
 		}
 	}
 	
+	public static void renderFox (Fox animal, float screenPositionX, float screenPositionY, float dx, float dy)
+	{
+		int numCorners = 4;
+		float[] cornersX = {dx, Node.getDisplayWidth() - dx, Node.getDisplayWidth() - dx, dx};
+		float[] cornersY = {dy, dy, Node.getDisplayHeight() - dy, Node.getDisplayHeight() - dy};
+		for (int i = 0; i < numCorners; ++i)
+		{
+			cornersX[i] += screenPositionX;
+			cornersY[i] += screenPositionY;
+		}
+
+		cornersX[0] = (cornersX[0] + cornersX[1])/2;
+		cornersX[1] = cornersX[0]; 
+		renderQuad(animal.getColor(), cornersX, cornersY, numCorners);
+		
+		glBegin(GL_LINE_LOOP); {
+			GL11.glColor3f(0f, 0f, 0f);
+			for (int i = 0; i < numCorners; ++i)
+			{
+				glVertex2f(cornersX[i],cornersY[i]);
+			}
+		} glEnd();		
+	}
+	public static void renderRabbit (Rabbit animal, float screenPositionX, float screenPositionY, float dx, float dy)
+	{
+		drawCircle(screenPositionX + Node.getDisplayWidth()*0.5f, screenPositionY + Node.getDisplayWidth()*0.5f, 
+				Node.getDisplayWidth()*0.5f, 0f, 360f, 8, animal.color);
+	}
 	
 	public static void drawCircle(float x, float y, float r, double startingAngleDeg, double endAngleDeg, int slices, Color color) {
         int radius = (int) r;
@@ -201,6 +199,14 @@ public class DisplayHelper {
             prevYA = ya;
         }
     }
+	
+	public static void renderLine(Color color, float[] cornersX,  float[] cornersY)
+	{
+		glBegin(GL_LINES); {
+			
+		} glEnd();
+	}
+	
 	
 	public static void renderQuad(Color color,
 			float[] cornersX,  float[] cornersY, int numEdges)

@@ -4,8 +4,8 @@ package predpray;
 public class Fox extends Animal {
 
 	private static final double HUNGER_LIMIT_SEARCH_FOR_FOOD = 25d;
-	private static final double HUNGER_LIMIT_DEATH = 200d;
-	private static final double HUNGER_LIMIT_FERTILE = 10d;
+	private static final double HUNGER_LIMIT_DEATH = 100d;
+	private static final double HUNGER_LIMIT_FERTILE = 3d;
 	private static final double HUNGER_CONSUMED_WHEN_MATING = 10d;
 	private static final double HUNGER_AT_BIRTH = HUNGER_LIMIT_DEATH - HUNGER_CONSUMED_WHEN_MATING;
 	
@@ -16,9 +16,8 @@ public class Fox extends Animal {
 		super(positionX, positionY);
 		this.walkThroughEdge = true;
 		this.color = new Color(1f, 0f, 0f);
-		this.hunger = HUNGER_AT_BIRTH;
 		this.killCount = 0;
-		this.fertilityAge = 100D;
+		this.fertilityAge = 10D;
 	}
 	
 	public Fox(Fox mother, Fox father) {

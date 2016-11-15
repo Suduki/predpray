@@ -15,7 +15,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.TrueTypeFont;
 
-public class main {
+public class Main {
 
 
 
@@ -30,9 +30,9 @@ public class main {
 		for (int i = 0; i < INIT_NUMBER_OF_RABBITS; i++) {
 			createRandomRabbit();
 		}
-//		for (int i = 0; i < INIT_NUMBER_OF_FOXES; i++) {
-//			createRandomFox();
-//		}
+		for (int i = 0; i < INIT_NUMBER_OF_FOXES; i++) {
+			createRandomFox();
+		}
 		
 //		createFoxesInASquare(0, 0, 10);
 //		createRabbitsInASquare(0, 0, 70);
@@ -110,14 +110,14 @@ public class main {
 					Thread.sleep(50);
    					if (Mouse.isButtonDown(0))
 					{
-   						createFoxesInASquare(Mouse.getX()*Map.numberOfNodesX/DisplayHelper.SCREEN_WIDTH, 
-   								Mouse.getY()*Map.numberOfNodesX/DisplayHelper.SCREEN_HEIGHT, 5);
+   						createFoxesInASquare(Mouse.getX()*NUM_NODES_X/DisplayHelper.SCREEN_WIDTH, 
+   								Mouse.getY()*NUM_NODES_X/DisplayHelper.SCREEN_HEIGHT, 5);
    						Thread.sleep(1000);
 					}
    					if (Mouse.isButtonDown(1))
 					{
-   						createRabbitsInASquare(Mouse.getX()*Map.numberOfNodesX/DisplayHelper.SCREEN_WIDTH, 
-   								Mouse.getY()*Map.numberOfNodesX/DisplayHelper.SCREEN_HEIGHT, 5);
+   						createRabbitsInASquare(Mouse.getX()*NUM_NODES_X/DisplayHelper.SCREEN_WIDTH, 
+   								Mouse.getY()*NUM_NODES_X/DisplayHelper.SCREEN_HEIGHT, 5);
    						Thread.sleep(1000);
 					}
 					if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
@@ -137,11 +137,11 @@ public class main {
 
 
 	private static void createRandomFox() {
-		Fox fox = new Fox(RANDOM.nextInt(Map.numberOfNodesX), RANDOM.nextInt(Map.numberOfNodesY));
+		Fox fox = new Fox(RANDOM.nextInt(NUM_NODES_X), RANDOM.nextInt(NUM_NODES_Y));
 		AnimalHandler.addNewAnimal(fox);
 	}
 	private static void createRandomRabbit() {
-		Rabbit rabbit = new Rabbit(RANDOM.nextInt(Map.numberOfNodesX), RANDOM.nextInt(Map.numberOfNodesY));
+		Rabbit rabbit = new Rabbit(RANDOM.nextInt(NUM_NODES_X), RANDOM.nextInt(NUM_NODES_Y));
 		AnimalHandler.addNewAnimal(rabbit);		
 	}
 	
@@ -152,16 +152,15 @@ public class main {
 		{
 			for (int j = y; j < y + width; ++j)
 			{
-				Fox fox = new Fox(i, j);
-				AnimalHandler.addNewAnimal(fox);
+				AnimalHandler.addNewAnimal(new Fox(i, j));
 			}	
 		}
 	}
-	public static void createRabbitsInASquare(int x, int y, int width) 
+	public static void createRabbitsInASquare(float f, float g, int width) 
 	{
-		for (int i = x; i < x + width; ++i)
+		for (int i = (int) f; i < f + width; ++i)
 		{
-			for (int j = y; j < y + width; ++j)
+			for (int j = (int) g; j < g + width; ++j)
 			{
 				Rabbit rabbit = new Rabbit(i, j);
 				AnimalHandler.addNewAnimal(rabbit);

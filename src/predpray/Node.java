@@ -12,8 +12,8 @@ public class Node {
 	private Scent scentRabbit;
 	private Scent scentFox;
 	private Grass grass;
-	public static float displayWidth = new Float(DisplayHelper.SCREEN_WIDTH) / Map.numberOfNodesX;
-	public static float displayHeight = new Float(DisplayHelper.SCREEN_HEIGHT) / Map.numberOfNodesY;
+	public static float displayWidth = new Float(DisplayHelper.SCREEN_WIDTH) / NUM_NODES_X;
+	public static float displayHeight = new Float(DisplayHelper.SCREEN_HEIGHT) / NUM_NODES_Y;
 	private Animal[] animalsInNode;
 	private PredPrayColor color;
 	
@@ -81,7 +81,7 @@ public class Node {
 		float screenPositionX = positionX * displayWidth;
 		float screenPositionY = positionY * displayHeight;
 		
-		main.displayHelper.renderQuad(red, green, blue, 
+		Main.displayHelper.renderQuad(red, green, blue, 
 				screenPositionX, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 
@@ -90,14 +90,14 @@ public class Node {
 	
 	public void render() {
 		
-		float red = new Float(positionX)/Map.numberOfNodesX  / 2;
-		float green = new Float((1 - Math.sqrt(positionY * positionY + positionX * positionX)/Map.numberOfNodesY)/2);
-		float blue = new Float(positionY)/Map.numberOfNodesY / 2;
+		float red = new Float(positionX)/NUM_NODES_X  / 2;
+		float green = new Float((1 - Math.sqrt(positionY * positionY + positionX * positionX)/NUM_NODES_Y)/2);
+		float blue = new Float(positionY)/NUM_NODES_Y / 2;
 		
 		float screenPositionX = positionX * displayWidth;
 		float screenPositionY = positionY * displayHeight;
 		
-		main.displayHelper.renderQuad(red, green, blue, 
+		Main.displayHelper.renderQuad(red, green, blue, 
 				screenPositionX, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 
@@ -109,7 +109,7 @@ public class Node {
 		float screenPositionX = positionX * displayWidth;
 		float screenPositionY = positionY * displayHeight;
 		
-		main.displayHelper.renderQuad(color, 
+		Main.displayHelper.renderQuad(color, 
 				screenPositionX, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 

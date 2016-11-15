@@ -4,38 +4,36 @@ import static predpray.Constants.*;
 
 public class Map {
 
-	public static final int numberOfNodesX = 48*MAP_MULTIPLIER; //TODO öka storlek, kolla svart ruta.
-	public static final int numberOfNodesY = 48*MAP_MULTIPLIER;
 	private Node[][] nodes;
 	
 	public Map() {
-		nodes = new Node[numberOfNodesX][numberOfNodesY];
-		for (int i = 0; i < numberOfNodesX; i++) {
-			for (int j = 0; j < numberOfNodesY; j++) {
+		nodes = new Node[NUM_NODES_X][NUM_NODES_Y];
+		for (int i = 0; i < NUM_NODES_X; i++) {
+			for (int j = 0; j < NUM_NODES_Y; j++) {
 				nodes[i][j] = new Node(i, j);
 			}
 		}
 	}
 	
 	public void renderMap() {
-		for (int i = 0; i < numberOfNodesX; i++) {
-			for (int j = 0; j < numberOfNodesY; j++) {
+		for (int i = 0; i < NUM_NODES_X; i++) {
+			for (int j = 0; j < NUM_NODES_Y; j++) {
 				nodes[i][j].render();
 			}
 		}
 	}
 	
 	public void renderGrass() {
-		for (int i = 0; i < numberOfNodesX; i++) {
-			for (int j = 0; j < numberOfNodesY; j++) {
+		for (int i = 0; i < NUM_NODES_X; i++) {
+			for (int j = 0; j < NUM_NODES_Y; j++) {
 				nodes[i][j].renderGrass();
 			}
 		}
 	}
 	
 	public void renderSmell() {
-		for (int i = 0; i < numberOfNodesX; i++) {
-			for (int j = 0; j < numberOfNodesY; j++) {
+		for (int i = 0; i < NUM_NODES_X; i++) {
+			for (int j = 0; j < NUM_NODES_Y; j++) {
 				nodes[i][j].renderSmell();
 			}
 		}
@@ -54,27 +52,27 @@ public class Map {
 	 */
 	public static int[] correctCoordinates(int positionX, int positionY, boolean walkThroughEdge) {
 		if(walkThroughEdge) {
-			if (positionX == numberOfNodesX) {
+			if (positionX == NUM_NODES_X) {
 				positionX = 0;
 			}
 			if (positionX == -1) {
-				positionX = numberOfNodesX - 1;
+				positionX = NUM_NODES_X - 1;
 			}
-			if (positionY == numberOfNodesY) {
+			if (positionY == NUM_NODES_Y) {
 				positionY = 0;
 			}
 			if (positionY == -1) {
-				positionY = numberOfNodesY - 1;
+				positionY = NUM_NODES_Y - 1;
 			}
 		}
 		else {
-			if (positionX == numberOfNodesX) {
+			if (positionX == NUM_NODES_X) {
 				positionX --;
 			}
 			if (positionX == -1) {
 				positionX = 0;
 			}
-			if (positionY == numberOfNodesY) {
+			if (positionY == NUM_NODES_Y) {
 				positionY --;
 			}
 			if (positionY == -1) {
@@ -89,7 +87,28 @@ public class Map {
 	}
 
 	public boolean addAnimalToNode(Animal animal) {
-		return nodes[animal.getPositionX()][animal.getPositionY()].addAnimalToNode(animal);
+		if (validPositionX(animal.getPositionX()) && validPositionY(animal.getPositionY()))
+		{
+			return nodes[animal.getPositionX()][animal.getPositionY()].addAnimalToNode(animal);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public boolean validPositionX(int x) {
+		if (x < 0 || x >= NUM_NODES_X)
+		{
+			return false;
+		}
+		return true;
+	}
+	public boolean validPositionY(int y) {
+		if (y < 0 || y >= NUM_NODES_Y)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	public Animal[] getAnimalsAtSameNodeAsOtherAnimal(Animal animal) {
@@ -110,24 +129,24 @@ public class Map {
 	}
 	public int correctX(int positionX, boolean walkThroughEdge) {
 		if (walkThroughEdge) {
-			if (positionX == numberOfNodesX) {return 0;} 
-			else if (positionX == -1) {return numberOfNodesX-1;}
+			if (positionX == NUM_NODES_X) {return 0;} 
+			else if (positionX == -1) {return NUM_NODES_X-1;}
 			else {return positionX;}
 		} 
 		else {
-			if (positionX == numberOfNodesX) {return numberOfNodesX-1; }
+			if (positionX == NUM_NODES_X) {return NUM_NODES_X-1; }
 			else if (positionX == -1) {return 0;}
 			else {return positionX;}
 		}	
 	}
 	public int correctY(int positionY, boolean walkThroughEdge) {
 		if (walkThroughEdge) {			
-			if (positionY == numberOfNodesY){ return 0; }
-			else if (positionY == -1) {return numberOfNodesY-1;}
+			if (positionY == NUM_NODES_Y){ return 0; }
+			else if (positionY == -1) {return NUM_NODES_Y-1;}
 			else {return positionY;}
 		}
 		else {
-			if (positionY == numberOfNodesY) {return numberOfNodesY-1;} 
+			if (positionY == NUM_NODES_Y) {return NUM_NODES_Y-1;} 
 			else if (positionY == -1) {return 0;}
 			else {return positionY;}
 		}
@@ -150,9 +169,9 @@ public class Map {
 	}
 
 	public void updateAllNodes() {
-		for (int i = 0; i < numberOfNodesX; ++i) 
+		for (int i = 0; i < NUM_NODES_X; ++i) 
 		{
-			for (int j = 0; j < numberOfNodesY; ++j) 
+			for (int j = 0; j < NUM_NODES_Y; ++j) 
 			{
 				nodes[i][j].update();
 			}

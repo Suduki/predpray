@@ -32,7 +32,7 @@ import org.newdawn.slick.TrueTypeFont;
 
 public class DisplayHelper {
 	public static final int SCREEN_WIDTH = 1080; 
-	public static final int SCREEN_HEIGHT = 1080;//480;
+	public static final int SCREEN_HEIGHT = 1080;
 	public static final int SCREEN_SIDE_WIDTH = 360;
 	private static TrueTypeFont font;
 	private static Font awtFont;
@@ -79,7 +79,7 @@ public class DisplayHelper {
 
 //				main.getMap().renderMap();
 //				Main.getMap().renderSmell();
-				main.getMap().renderGrass();
+				Main.getMap().renderGrass();
 				AnimalHandler.renderAllAnimals();
 				renderStrings();
 				
@@ -110,6 +110,10 @@ public class DisplayHelper {
 					drawString(SCREEN_WIDTH + 20,120+offset, "  Hunger limit = " + bestFox.getHungerLimitDeath());
 					drawString(SCREEN_WIDTH + 20,140+offset, "  Kill count   = " + bestFox.killCount);
 				}
+				if (offset > 300) 
+				{
+					break;
+				}
 				offset += 100;
 			}
 		}
@@ -121,17 +125,34 @@ public class DisplayHelper {
 				displayHelper.exit();
 			}
 			//TODO: event
-			if (Mouse.isButtonDown(0))
-			{
-					main.createFoxesInASquare(Mouse.getX()*Map.numberOfNodesX/DisplayHelper.SCREEN_WIDTH, 
-							Mouse.getY()*Map.numberOfNodesX/DisplayHelper.SCREEN_HEIGHT, 5);
-			}
-				if (Mouse.isButtonDown(1))
-			{
-					main.createRabbitsInASquare(Mouse.getX()*Map.numberOfNodesX/DisplayHelper.SCREEN_WIDTH, 
-							Mouse.getY()*Map.numberOfNodesX/DisplayHelper.SCREEN_HEIGHT, 5);
+			if(Mouse.isInsideWindow()) {
+
+				int x = Mouse.getX();
+				int y = Mouse.getY();
+				if (Mouse.isButtonDown(0) && withinSimulationWindow(x, y))
+				{
+					Main.createFoxesInASquare(Math.round(x*NUM_NODES_X/SCREEN_WIDTH), 
+							NUM_NODES_Y - Math.round(new Float(y*NUM_NODES_Y)/DisplayHelper.SCREEN_HEIGHT), 3);
+				}
+				if (Mouse.isButtonDown(1) && withinSimulationWindow(x, y))
+				{
+					Main.createRabbitsInASquare(new Float(x)*NUM_NODES_X/SCREEN_WIDTH, 
+							NUM_NODES_Y - (new Float(y*NUM_NODES_Y)/DisplayHelper.SCREEN_HEIGHT), 3);
+				}
 			}
 		}
+		
+		public static boolean withinSimulationWindow(float x, float y) {
+			if (x >= 0 && y >= 0 && x < SCREEN_WIDTH && y < SCREEN_HEIGHT) 
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		private void initializeDisplay() {
 			try {
 				Display.setDisplayMode(new DisplayMode(SCREEN_WIDTH + SCREEN_SIDE_WIDTH, SCREEN_HEIGHT));

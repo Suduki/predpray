@@ -64,7 +64,7 @@ public class Rabbit extends Animal {
 			// Hungry, not fertile, no enemy
 			Direction directionToGrass = searchForGrass();
 			moved = moveOneStep(directionToGrass);
-			hunger -= main.map.getNodeAt(positionX, positionY).harvest(HARVEST_SKILL) * DIGESTION_EFFECTIVENESS;
+			hunger -= Main.map.getNodeAt(positionX, positionY).harvest(HARVEST_SKILL) * DIGESTION_EFFECTIVENESS;
 		}
 		
 		return moved;
@@ -93,16 +93,16 @@ public class Rabbit extends Animal {
 		
 		
 		direction[order.get(0)] = Direction.EAST;
-		grassHeights[order.get(0)] = main.getMap().getGrassHeightAt(main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
+		grassHeights[order.get(0)] = Main.getMap().getGrassHeightAt(Main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
 
 		direction[order.get(1)] = Direction.WEST;
-		grassHeights[order.get(1)] = main.getMap().getGrassHeightAt(main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
+		grassHeights[order.get(1)] = Main.getMap().getGrassHeightAt(Main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
 		
 		direction[order.get(2)] = Direction.NORTH;
-		grassHeights[order.get(2)] = main.getMap().getGrassHeightAt(positionX, main.getMap().correctY(positionY + 1, walkThroughEdge));
+		grassHeights[order.get(2)] = Main.getMap().getGrassHeightAt(positionX, Main.getMap().correctY(positionY + 1, walkThroughEdge));
 		
 		direction[order.get(3)] = Direction.SOUTH;
-		grassHeights[order.get(3)] = main.getMap().getGrassHeightAt(positionX, main.getMap().correctY(positionY - 1, walkThroughEdge));
+		grassHeights[order.get(3)] = Main.getMap().getGrassHeightAt(positionX, Main.getMap().correctY(positionY - 1, walkThroughEdge));
 		
 
 		double bestHeight = 0;

@@ -5,9 +5,9 @@ import static predpray.Constants.*;
 public class Fox extends Animal {
 
 	private static final double HUNGER_LIMIT_SEARCH_FOR_FOOD = 25d;
-	private double HUNGER_LIMIT_DEATH = 100d;
+	private double HUNGER_LIMIT_DEATH = 50d;
 	private static final double HUNGER_LIMIT_FERTILE = 10d;
-	private static final double HUNGER_CONSUMED_WHEN_MATING = 100d;
+	private static final double HUNGER_CONSUMED_WHEN_MATING = 25d;
 	private final double HUNGER_AT_BIRTH = HUNGER_LIMIT_DEATH - HUNGER_CONSUMED_WHEN_MATING;
 
 	public int killCount;

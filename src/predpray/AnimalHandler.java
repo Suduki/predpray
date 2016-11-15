@@ -18,7 +18,7 @@ public class AnimalHandler {
 
 		// Add it to the first available spot in the list.
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
-			if (allAnimals[i] == null && main.getMap().addAnimalToNode(animal)) {
+			if (allAnimals[i] == null && Main.getMap().addAnimalToNode(animal)) {
 				animal.id = i;
 				allAnimals[i] = animal;
 				totalNumberOfLivingAnimals++;
@@ -47,7 +47,7 @@ public class AnimalHandler {
 					totalNumberOfLivingRabbits --;
 				if (animal instanceof Fox) 
 					totalNumberOfLivingFoxes --;
-				main.getMap().removeAnimalFromNode(animal);
+				Main.getMap().removeAnimalFromNode(animal);
 			}
 		}
 	}
@@ -70,10 +70,10 @@ public class AnimalHandler {
 		for (Integer i : order) {
 			Animal animal = allAnimals[i];
 			if (animal != null) {
-				main.getMap().removeAnimalFromNode(animal);
+				Main.getMap().removeAnimalFromNode(animal);
 				animal.moveOneStepInCompletelyRandomDirection();
-				interact(main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);
-				main.getMap().addAnimalToNode(animal);
+				interact(Main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);
+				Main.getMap().addAnimalToNode(animal);
 				animal.age();
 			}
 		}
@@ -89,10 +89,10 @@ public class AnimalHandler {
 		for (Integer i : order) {
 			Animal animal = allAnimals[i];
 			if (animal != null) {
-				main.getMap().removeAnimalFromNode(animal);
+				Main.getMap().removeAnimalFromNode(animal);
 				animal.move();
-				main.getMap().addAnimalToNode(animal);
-				interact(main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);					
+				Main.getMap().addAnimalToNode(animal);
+				interact(Main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);					
 				
 				animal.age();
 			}
@@ -140,7 +140,7 @@ public class AnimalHandler {
 		Fox bestKiller = null;
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
 			if (allAnimals[i] != null && allAnimals[i] instanceof Fox) {
-				((Fox)allAnimals[i]).renderMe = false;
+				((Fox)allAnimals[i]).renderMe = RENDER_FOXES;
 				if (((Fox)allAnimals[i]).killCount > bestKill)
 				{
 					bestKiller = (Fox)allAnimals[i];
@@ -162,7 +162,7 @@ public class AnimalHandler {
 			numFoxesOverKillLimit = 0;
 			for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
 				if (allAnimals[i] != null && allAnimals[i] instanceof Fox) {
-					((Fox)allAnimals[i]).renderMe = false;
+					((Fox)allAnimals[i]).renderMe = RENDER_FOXES;
 					if (((Fox)allAnimals[i]).killCount > killLimit)
 					{
 						numFoxesOverKillLimit++;
@@ -172,7 +172,6 @@ public class AnimalHandler {
 		} while(numFoxesOverKillLimit > 10 && (killLimit ++) > 0);
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
 			if (allAnimals[i] != null && allAnimals[i] instanceof Fox) {
-				((Fox)allAnimals[i]).renderMe = false;
 				if (((Fox)allAnimals[i]).killCount >= killLimit)
 				{
 					foxList.add((Fox)allAnimals[i]);

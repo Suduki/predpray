@@ -23,8 +23,8 @@ public class PredPrayColor {
 		this.green = (new Float(pGrass.getHeight())/GRASS_MAX_LIMIT)*0.8f;
 //		this.green += 0.2f;
 //		this.red = 0.2f;
-		this.red = (1-new Float(pGrass.getHeight())/GRASS_MAX_LIMIT)*0.4f;
-		this.blue = (1-new Float(pGrass.getHeight())/GRASS_MAX_LIMIT)*0f;
+		this.red = (1-new Float(pGrass.getHeight())/GRASS_MAX_LIMIT)*0.2f;
+		this.blue = (1-new Float(pGrass.getHeight())/GRASS_MAX_LIMIT)*0.1f;
 	}
 	
 	public void reset()

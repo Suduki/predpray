@@ -1,23 +1,24 @@
 package predpray;
 
+import static predpray.Constants.*;
 
 public class Fox extends Animal {
 
 	private static final double HUNGER_LIMIT_SEARCH_FOR_FOOD = 25d;
-	private static final double HUNGER_LIMIT_DEATH = 100d;
-	private static final double HUNGER_LIMIT_FERTILE = 3d;
-	private static final double HUNGER_CONSUMED_WHEN_MATING = 10d;
-	private static final double HUNGER_AT_BIRTH = HUNGER_LIMIT_DEATH - HUNGER_CONSUMED_WHEN_MATING;
-	
+	private double HUNGER_LIMIT_DEATH = 100d;
+	private static final double HUNGER_LIMIT_FERTILE = 10d;
+	private static final double HUNGER_CONSUMED_WHEN_MATING = 100d;
+	private final double HUNGER_AT_BIRTH = HUNGER_LIMIT_DEATH - HUNGER_CONSUMED_WHEN_MATING;
 
 	public int killCount;
 	
 	public Fox(Integer positionX, Integer positionY) {
 		super(positionX, positionY);
 		this.walkThroughEdge = true;
-		this.color = new Color(1f, 0f, 0f);
+		this.color = new PredPrayColor(1f, 0f, 0f);
 		this.killCount = 0;
 		this.fertilityAge = 10D;
+		this.renderMe = RENDER_FOXES;
 	}
 	
 	public Fox(Fox mother, Fox father) {
@@ -42,9 +43,10 @@ public class Fox extends Animal {
 		}
 //			hunger = hunger - (Fox.HUNGER_LIMIT_DEATH - ((Fox)animalToEat).getHunger());
 		if (animalToEat instanceof Rabbit)
-			hunger = hunger - ((Rabbit)animalToEat).energy;
+			hunger = hunger - ((Rabbit)animalToEat).energy * killCount;
 		if (hunger < 0) hunger = 0D;
 		killCount ++;
+		HUNGER_LIMIT_DEATH ++;
 		animalToEat.die();
 	}
 	

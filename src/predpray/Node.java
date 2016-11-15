@@ -15,17 +15,17 @@ public class Node {
 	public static float displayWidth = new Float(DisplayHelper.SCREEN_WIDTH) / Map.numberOfNodesX;
 	public static float displayHeight = new Float(DisplayHelper.SCREEN_HEIGHT) / Map.numberOfNodesY;
 	private Animal[] animalsInNode;
-	private Color color;
+	private PredPrayColor color;
 	
 //	public static final int MAXIMUM_NUMBER_OF_ANIMALS = 10;
 	
 	public Node(int x, int y) {
 		positionX = x;
 		positionY = y;
-		grass = new Grass(GRASS_MAX_LIMIT);
+		grass = new Grass(GRASS_GROWTH*10);
 		scentRabbit = new Scent(0, 0);
 		scentFox = new Scent(0, 0);
-		color = new Color(0f, 0f, 0f);
+		color = new PredPrayColor(0f, 0f, 0f);
 		animalsInNode = new Animal[MAX_NUMBER_OF_ALLOWED_ANIMALS_ON_NODE];
 	}
 	
@@ -81,7 +81,7 @@ public class Node {
 		float screenPositionX = positionX * displayWidth;
 		float screenPositionY = positionY * displayHeight;
 		
-		Main.displayHelper.renderQuad(red, green, blue, 
+		main.displayHelper.renderQuad(red, green, blue, 
 				screenPositionX, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 
@@ -97,7 +97,7 @@ public class Node {
 		float screenPositionX = positionX * displayWidth;
 		float screenPositionY = positionY * displayHeight;
 		
-		Main.displayHelper.renderQuad(red, green, blue, 
+		main.displayHelper.renderQuad(red, green, blue, 
 				screenPositionX, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 
@@ -109,7 +109,7 @@ public class Node {
 		float screenPositionX = positionX * displayWidth;
 		float screenPositionY = positionY * displayHeight;
 		
-		Main.displayHelper.renderQuad(color, 
+		main.displayHelper.renderQuad(color, 
 				screenPositionX, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY, 
 				screenPositionX + displayWidth, screenPositionY + displayHeight, 

@@ -5,9 +5,9 @@ import static predpray.Constants.*;
 public class Grass {
 	private double height;
 	
-	public Grass(int length)
+	public Grass(double d)
 	{
-		this.height = length;
+		this.height = d;
 	}
 	
 	public void grow()

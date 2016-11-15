@@ -10,6 +10,7 @@ public class AnimalHandler {
 	private static int totalNumberOfLivingAnimals = 0;
 	private static int totalNumberOfLivingRabbits = 0;
 	private static int totalNumberOfLivingFoxes = 0;
+	private static int killLimit = 0;
 
 	private static Animal[] allAnimals = new Animal[TOTAL_NUMBER_OF_ALLOWED_ANIMALS];
 
@@ -17,7 +18,7 @@ public class AnimalHandler {
 
 		// Add it to the first available spot in the list.
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
-			if (allAnimals[i] == null && Main.getMap().addAnimalToNode(animal)) {
+			if (allAnimals[i] == null && main.getMap().addAnimalToNode(animal)) {
 				animal.id = i;
 				allAnimals[i] = animal;
 				totalNumberOfLivingAnimals++;
@@ -46,7 +47,7 @@ public class AnimalHandler {
 					totalNumberOfLivingRabbits --;
 				if (animal instanceof Fox) 
 					totalNumberOfLivingFoxes --;
-				Main.getMap().removeAnimalFromNode(animal);
+				main.getMap().removeAnimalFromNode(animal);
 			}
 		}
 	}
@@ -54,16 +55,7 @@ public class AnimalHandler {
 	public static synchronized void renderAllAnimals() {
 		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
 			if (allAnimals[i] != null) {
-				if (allAnimals[i].getClass() == Rabbit.class) {
-					DisplayHelper.render(allAnimals[i]);
-				}
-			}
-		}
-		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
-			if (allAnimals[i] != null) {
-				if (allAnimals[i].getClass() == Fox.class) {
-					DisplayHelper.render(allAnimals[i]);
-				}
+				DisplayHelper.render(allAnimals[i]);
 			}
 		}
 	}
@@ -78,10 +70,10 @@ public class AnimalHandler {
 		for (Integer i : order) {
 			Animal animal = allAnimals[i];
 			if (animal != null) {
-				Main.getMap().removeAnimalFromNode(animal);
+				main.getMap().removeAnimalFromNode(animal);
 				animal.moveOneStepInCompletelyRandomDirection();
-				interact(Main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);
-				Main.getMap().addAnimalToNode(animal);
+				interact(main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);
+				main.getMap().addAnimalToNode(animal);
 				animal.age();
 			}
 		}
@@ -97,10 +89,10 @@ public class AnimalHandler {
 		for (Integer i : order) {
 			Animal animal = allAnimals[i];
 			if (animal != null) {
-				Main.getMap().removeAnimalFromNode(animal);
+				main.getMap().removeAnimalFromNode(animal);
 				animal.move();
-				Main.getMap().addAnimalToNode(animal);
-				interact(Main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);					
+				main.getMap().addAnimalToNode(animal);
+				interact(main.getMap().getAnimalsAtSameNodeAsOtherAnimal(animal), animal);					
 				
 				animal.age();
 			}
@@ -141,5 +133,53 @@ public class AnimalHandler {
 	public static int getMean() {
 		return 0;
 		
+	}
+
+	public static Fox getBestFox() {
+		int bestKill = 0;
+		Fox bestKiller = null;
+		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+			if (allAnimals[i] != null && allAnimals[i] instanceof Fox) {
+				((Fox)allAnimals[i]).renderMe = false;
+				if (((Fox)allAnimals[i]).killCount > bestKill)
+				{
+					bestKiller = (Fox)allAnimals[i];
+					bestKill = bestKiller.killCount;
+				}
+			}
+		}
+		if (bestKiller != null)
+		{
+			bestKiller.renderMe = true;
+		}
+		return bestKiller;
+	}
+
+	public static ArrayList<Fox> getBestFoxes() {
+		ArrayList<Fox> foxList = new ArrayList<Fox>();
+		int numFoxesOverKillLimit;
+		do {
+			numFoxesOverKillLimit = 0;
+			for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+				if (allAnimals[i] != null && allAnimals[i] instanceof Fox) {
+					((Fox)allAnimals[i]).renderMe = false;
+					if (((Fox)allAnimals[i]).killCount > killLimit)
+					{
+						numFoxesOverKillLimit++;
+					}
+				}
+			}
+		} while(numFoxesOverKillLimit > 10 && (killLimit ++) > 0);
+		for (int i = 0; i < TOTAL_NUMBER_OF_ALLOWED_ANIMALS; i++) {
+			if (allAnimals[i] != null && allAnimals[i] instanceof Fox) {
+				((Fox)allAnimals[i]).renderMe = false;
+				if (((Fox)allAnimals[i]).killCount >= killLimit)
+				{
+					foxList.add((Fox)allAnimals[i]);
+					((Fox)allAnimals[i]).renderMe = true;
+				}
+			}
+		}
+		return foxList;
 	}
 }

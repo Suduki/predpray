@@ -2,6 +2,7 @@ package predpray;
 
 import static predpray.Constants.*;
 
+import java.awt.Font;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,8 +13,9 @@ import java.lang.reflect.InvocationTargetException;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.newdawn.slick.TrueTypeFont;
 
-public class Main {
+public class main {
 
 
 
@@ -25,16 +27,16 @@ public class Main {
 		displayHelper = new DisplayHelper();
 		map = new Map();
 		
-//		for (int i = 0; i < INIT_NUMBER_OF_RABBITS; i++) {
-//			createRandomRabbit();
-//		}
+		for (int i = 0; i < INIT_NUMBER_OF_RABBITS; i++) {
+			createRandomRabbit();
+		}
 //		for (int i = 0; i < INIT_NUMBER_OF_FOXES; i++) {
 //			createRandomFox();
 //		}
 		
-		createFoxesInASquare(0, 0, 10);
-		createRabbitsInASquare(0, 0, 70);
-		createFoxesInASquare(50, 50, 10);
+//		createFoxesInASquare(0, 0, 10);
+//		createRabbitsInASquare(0, 0, 70);
+//		createFoxesInASquare(50, 50, 10);
 
 
 		//		while(!Display.isCloseRequested()) {
@@ -48,8 +50,10 @@ public class Main {
 		//TODO egentligen borde INTE isCloseRequested vara i simulering och inte i render-tråden.
 		// Rendertråden ansvarar för att lyssna på tangentbord och mus TODO fix
 		//		checkKeyboardForDisplayChanges();
+		
+		Thread.sleep(1000);
 
-		Thread.sleep(100);
+
 		int iteration = 0;
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream("filename.txt"), "utf-8"));
@@ -65,25 +69,24 @@ public class Main {
 				//				
 				//			}
 				iteration ++;
-				if(iteration % 1 == 0) {
-					int numberOfAnimals = AnimalHandler.getNumberOfAnimals();
-					int numberOfFoxes = AnimalHandler.getNumberOfFoxes();
-					int numberOfRabbits = AnimalHandler.getNumberOfRabbits();
-					writer.write(numberOfRabbits + " " + numberOfFoxes + "\n");
-					System.out.println("numberOfAnimals = " + numberOfAnimals + 
-							",    foxes = " + numberOfFoxes + ",   rabbits = " + numberOfRabbits);
-					while (numberOfFoxes < MIN_NUMBER_OF_FOXES || numberOfRabbits > MIN_FOXES_PER_RABBITS * numberOfFoxes - 1) {
-						System.out.print("Adding fox.");
-						createRandomFox();
-						numberOfFoxes++;
-					}
-					if (numberOfRabbits < MIN_NUMBER_OF_RABBITS)
-						System.out.println("   Adding " + (MIN_NUMBER_OF_RABBITS - numberOfRabbits) + "Rabz.");
-					while (numberOfRabbits < MIN_NUMBER_OF_RABBITS) {
-						createRandomRabbit();
-						numberOfRabbits++;
-					}
-				}
+//				if(iteration % 100 == 0) {
+//					int numberOfAnimals = AnimalHandler.getNumberOfAnimals();
+//					int numberOfFoxes = AnimalHandler.getNumberOfFoxes();
+//					int numberOfRabbits = AnimalHandler.getNumberOfRabbits();
+//					int bestFoxKillCount = AnimalHandler.getBestFox().killCount;
+//					writer.write(numberOfRabbits + " " + numberOfFoxes + "\n");
+//					while (numberOfFoxes < MIN_NUMBER_OF_FOXES || numberOfRabbits > MIN_FOXES_PER_RABBITS * (numberOfFoxes + 1)) {
+//						System.out.print("Adding fox.");
+//						createRandomFox();
+//						numberOfFoxes++;
+//					}
+//					if (numberOfRabbits < MIN_NUMBER_OF_RABBITS)
+//						System.out.println("   Adding " + (MIN_NUMBER_OF_RABBITS - numberOfRabbits) + "Rabz.");
+//					while (numberOfRabbits < MIN_NUMBER_OF_RABBITS) {
+//						createRandomRabbit();
+//						numberOfRabbits++;
+//					}
+//				}
 
 				try {
 					Thread.sleep(SLEEP_TIME);
@@ -107,9 +110,13 @@ public class Main {
 					Thread.sleep(50);
    					if (Mouse.isButtonDown(0))
 					{
-//   						createFoxesInASquare();
-   						System.out.println(Mouse.getX() + ", y " + Mouse.getY());
    						createFoxesInASquare(Mouse.getX()*Map.numberOfNodesX/DisplayHelper.SCREEN_WIDTH, 
+   								Mouse.getY()*Map.numberOfNodesX/DisplayHelper.SCREEN_HEIGHT, 5);
+   						Thread.sleep(1000);
+					}
+   					if (Mouse.isButtonDown(1))
+					{
+   						createRabbitsInASquare(Mouse.getX()*Map.numberOfNodesX/DisplayHelper.SCREEN_WIDTH, 
    								Mouse.getY()*Map.numberOfNodesX/DisplayHelper.SCREEN_HEIGHT, 5);
    						Thread.sleep(1000);
 					}
@@ -139,7 +146,7 @@ public class Main {
 	}
 	
 	
-	private static void createFoxesInASquare(int x, int y, int width) 
+	public static void createFoxesInASquare(int x, int y, int width) 
 	{
 		for (int i = x; i < x + width; ++i)
 		{
@@ -150,7 +157,7 @@ public class Main {
 			}	
 		}
 	}
-	private static void createRabbitsInASquare(int x, int y, int width) 
+	public static void createRabbitsInASquare(int x, int y, int width) 
 	{
 		for (int i = x; i < x + width; ++i)
 		{

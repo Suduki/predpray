@@ -10,6 +10,9 @@ import static predpray.Constants.*;
 
 public abstract class Animal {
 
+	public boolean renderMe;
+
+
 	protected boolean walkThroughEdge;
 	
 	public enum Direction {
@@ -25,7 +28,7 @@ public abstract class Animal {
 	protected Integer age;
 	protected Integer sinceLastBaby;
 	protected double hunger;
-	protected Color color;
+	protected PredPrayColor color;
 	
 	protected abstract double getHungerLimitSearchForFood();
 	protected abstract double getHungerLimitDeath();
@@ -39,11 +42,11 @@ public abstract class Animal {
 	public int id;
 
 	
-	public Color getColor() {
+	public PredPrayColor getColor() {
 		return color;
 	}
 
-	public void setColor(Color color) {
+	public void setColor(PredPrayColor color) {
 		this.color.reset();
 		this.color.append(color);
 	}
@@ -69,7 +72,7 @@ public abstract class Animal {
 		boolean moved = false;
 		switch (direction) {
 			case EAST:
-				if (!Main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX + 1, positionY, walkThroughEdge))) {
+				if (!main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX + 1, positionY, walkThroughEdge))) {
 					moved = false;
 				} 
 				else {
@@ -79,7 +82,7 @@ public abstract class Animal {
 				}
 				break;
 			case WEST:
-				if (!Main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX - 1, positionY, walkThroughEdge))) {
+				if (!main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX - 1, positionY, walkThroughEdge))) {
 					moved = false;
 				} 
 				else {
@@ -90,7 +93,7 @@ public abstract class Animal {
 				
 				break;
 			case NORTH:
-				if (!Main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY + 1, walkThroughEdge))) {
+				if (!main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY + 1, walkThroughEdge))) {
 					moved = false;
 				} 
 				else {
@@ -101,7 +104,7 @@ public abstract class Animal {
 				
 				break;
 			case SOUTH:
-				if (!Main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY - 1, walkThroughEdge))) {
+				if (!main.getMap().hasRoomForOneMoreAnimal(Map.correctCoordinates(positionX, positionY - 1, walkThroughEdge))) {
 					moved = false;
 				} 
 				else {
@@ -150,20 +153,20 @@ public abstract class Animal {
 		Collections.shuffle(order, RANDOM);
 		
 		direction[order.get(0)] = Direction.EAST;
-		scentRabbit[order.get(0)] = Main.getMap().getScentRabbitAt(Main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
-		scentFox[order.get(0)] = Main.getMap().getScentFoxAt(Main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
+		scentRabbit[order.get(0)] = main.getMap().getScentRabbitAt(main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
+		scentFox[order.get(0)] = main.getMap().getScentFoxAt(main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
 
 		direction[order.get(1)] = Direction.WEST;
-		scentRabbit[order.get(1)] = Main.getMap().getScentRabbitAt(Main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
-		scentFox[order.get(1)] = Main.getMap().getScentFoxAt(Main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
+		scentRabbit[order.get(1)] = main.getMap().getScentRabbitAt(main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
+		scentFox[order.get(1)] = main.getMap().getScentFoxAt(main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
 		
 		direction[order.get(2)] = Direction.NORTH;
-		scentRabbit[order.get(2)] = Main.getMap().getScentRabbitAt(positionX, Main.getMap().correctY(positionY + 1, walkThroughEdge));
-		scentFox[order.get(2)] = Main.getMap().getScentFoxAt(positionX, Main.getMap().correctY(positionY + 1, walkThroughEdge));
+		scentRabbit[order.get(2)] = main.getMap().getScentRabbitAt(positionX, main.getMap().correctY(positionY + 1, walkThroughEdge));
+		scentFox[order.get(2)] = main.getMap().getScentFoxAt(positionX, main.getMap().correctY(positionY + 1, walkThroughEdge));
 		
 		direction[order.get(3)] = Direction.SOUTH;
-		scentRabbit[order.get(3)] = Main.getMap().getScentRabbitAt(positionX, Main.getMap().correctY(positionY - 1, walkThroughEdge));
-		scentFox[order.get(3)] = Main.getMap().getScentFoxAt(positionX, Main.getMap().correctY(positionY - 1, walkThroughEdge));
+		scentRabbit[order.get(3)] = main.getMap().getScentRabbitAt(positionX, main.getMap().correctY(positionY - 1, walkThroughEdge));
+		scentFox[order.get(3)] = main.getMap().getScentFoxAt(positionX, main.getMap().correctY(positionY - 1, walkThroughEdge));
 		
 		int bestSmell = 0;
 		Direction bestDirection = Direction.NONE;
@@ -233,20 +236,20 @@ public abstract class Animal {
 		Collections.shuffle(order, RANDOM);
 		
 		direction[order.get(0)] = Direction.EAST;
-		scentRabbit[order.get(0)] = Main.getMap().getScentRabbitAt(Main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
-		scentFox[order.get(0)] = Main.getMap().getScentFoxAt(Main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
+		scentRabbit[order.get(0)] = main.getMap().getScentRabbitAt(main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
+		scentFox[order.get(0)] = main.getMap().getScentFoxAt(main.getMap().correctX(positionX + 1, walkThroughEdge), positionY);
 
 		direction[order.get(1)] = Direction.WEST;
-		scentRabbit[order.get(1)] = Main.getMap().getScentRabbitAt(Main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
-		scentFox[order.get(1)] = Main.getMap().getScentFoxAt(Main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
+		scentRabbit[order.get(1)] = main.getMap().getScentRabbitAt(main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
+		scentFox[order.get(1)] = main.getMap().getScentFoxAt(main.getMap().correctX(positionX - 1, walkThroughEdge), positionY);
 		
 		direction[order.get(2)] = Direction.NORTH;
-		scentRabbit[order.get(2)] = Main.getMap().getScentRabbitAt(positionX, Main.getMap().correctY(positionY + 1, walkThroughEdge));
-		scentFox[order.get(2)] = Main.getMap().getScentFoxAt(positionX, Main.getMap().correctY(positionY + 1, walkThroughEdge));
+		scentRabbit[order.get(2)] = main.getMap().getScentRabbitAt(positionX, main.getMap().correctY(positionY + 1, walkThroughEdge));
+		scentFox[order.get(2)] = main.getMap().getScentFoxAt(positionX, main.getMap().correctY(positionY + 1, walkThroughEdge));
 		
 		direction[order.get(3)] = Direction.SOUTH;
-		scentRabbit[order.get(3)] = Main.getMap().getScentRabbitAt(positionX, Main.getMap().correctY(positionY - 1, walkThroughEdge));
-		scentFox[order.get(3)] = Main.getMap().getScentFoxAt(positionX, Main.getMap().correctY(positionY - 1, walkThroughEdge));
+		scentRabbit[order.get(3)] = main.getMap().getScentRabbitAt(positionX, main.getMap().correctY(positionY - 1, walkThroughEdge));
+		scentFox[order.get(3)] = main.getMap().getScentFoxAt(positionX, main.getMap().correctY(positionY - 1, walkThroughEdge));
 		
 		int bestSmell = 0;
 		Direction bestDirection = Direction.NONE;
@@ -309,10 +312,6 @@ public abstract class Animal {
 //	}
 
 	public void die() {
-		if (this instanceof Fox)
-		{
-			System.out.println("kill count = " + ((Fox) this).killCount);
-		}
 		AnimalHandler.killAnimal(this);
 	}
 	
